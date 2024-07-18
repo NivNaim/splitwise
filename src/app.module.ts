@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GroupModule } from './group/group.module';
 import { ExpenseModule } from './expense/expense.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { configValidationSchema } from './config.schema';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         synchronize: true,
         entities: [__dirname + '/../**/*.entity.js'],
         host: configService.get('DB_HOST'),
+        port: configService.get('DB_PORT'),
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
@@ -26,6 +28,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
     ConfigModule.forRoot({
       envFilePath: [`.env.stage.${process.env.STAGE}`],
+      validationSchema: configValidationSchema,
     }),
   ],
 })

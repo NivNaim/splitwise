@@ -14,10 +14,10 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -28,13 +28,13 @@ export class User {
 
   @ManyToMany((_type) => Group, (group) => group.members)
   @JoinTable({
-    name: "user_groups"
+    name: 'user_groups',
   })
   memberGroups: Group[];
 
   @OneToMany((_type) => Expense, (expense) => expense.paidBy)
   expenses: Expense[];
 
-  @OneToMany((_type) => Expense, (expense) => expense.paidBy)
+  @OneToMany((_type) => Expense, (expense) => expense.receivedBy)
   incomes: Expense[];
 }

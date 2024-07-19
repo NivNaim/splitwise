@@ -20,11 +20,11 @@ export class Expense {
   @Column('decimal')
   value: number;
 
-  @ManyToOne((_type) => User)
+  @ManyToOne((_type) => User, (user) => user.expenses)
   paidBy: User;
 
-  @ManyToOne((_type) => User)
-  paidOn: User;
+  @ManyToOne((_type) => User, (user) => user.incomes)
+  receivedBy: User;
 
   @Column({ default: false })
   isPaid: boolean;

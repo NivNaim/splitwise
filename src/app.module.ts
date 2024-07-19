@@ -5,6 +5,9 @@ import { GroupModule } from './group/group.module';
 import { ExpenseModule } from './expense/expense.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
+import { Group } from './group/group.entity';
+import { Expense } from './expense/expense.entity';
+import { User } from './auth/user.entity';
 
 @Module({
   imports: [
@@ -18,7 +21,7 @@ import { configValidationSchema } from './config.schema';
         type: 'postgres',
         autoLoadEntities: true,
         synchronize: true,
-        entities: [__dirname + '/../**/*.entity.js'],
+        entities: [User, Group, Expense],
         host: configService.get('DB_HOST'),
         port: configService.get('DB_PORT'),
         username: configService.get('DB_USERNAME'),

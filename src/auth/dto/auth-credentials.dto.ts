@@ -12,9 +12,6 @@ export class SignInCredentialsDto {
   @MaxLength(20)
   username: string;
 
-  @IsEmail()
-  email: string;
-
   @IsString()
   @MinLength(8)
   @MaxLength(32)

@@ -63,11 +63,9 @@ Create a .env.stage.dev file in the root directory of your project with the foll
 # .env.stage.dev
 
 # Application port
-
 PORT="your port"
 
 # Database connection details
-
 DB_HOST="your db host"
 DB_PORT="your db port"
 DB_USERNAME="your db username"

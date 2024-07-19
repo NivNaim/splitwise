@@ -59,6 +59,7 @@ $ npm install
 
 Create a .env.stage.dev file in the root directory of your project with the following content:
 
+```bash
 # .env.stage.dev
 
 # Application port
@@ -72,6 +73,7 @@ DB_PORT="your db port"
 DB_USERNAME="your db username"
 DB_PASSWORD="your db password"
 DB_DATABASE="your db name"
+```
 
 ## Running the app
 

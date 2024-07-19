@@ -28,9 +28,9 @@ export class User {
 
   @ManyToMany((_type) => Group, (group) => group.members)
   @JoinTable({
-    name: 'user_groups',
+    name: 'user_groups_members',
   })
-  memberGroups: Group[];
+  memberOfGroups: Group[];
 
   @OneToMany((_type) => Expense, (expense) => expense.paidBy)
   expenses: Expense[];

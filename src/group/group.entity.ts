@@ -17,7 +17,7 @@ export class Group {
   @Column()
   name: string;
 
-  @ManyToMany((_type) => User, (user) => user.memberGroups)
+  @ManyToMany((_type) => User, (user) => user.memberOfGroups)
   members: User[];
 
   @ManyToOne((_type) => User, (user) => user.ownedGroups)

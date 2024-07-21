@@ -1,11 +1,10 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
   SignInCredentialsDto,
   SignUpCredentialsDto,
 } from './dto/auth-credentials.dto';
 import { Response } from 'express';
-import { Cookies } from './get-jwt.decorator';
 
 @Controller('auth')
 export class AuthController {

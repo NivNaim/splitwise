@@ -23,19 +23,19 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany((_type) => Group, (group) => group.owner)
+  @OneToMany(() => Group, (group) => group.owner)
   ownedGroups: Group[];
 
-  @ManyToMany((_type) => Group, (group) => group.members)
+  @ManyToMany(() => Group, (group) => group.members)
   @JoinTable({
     name: 'user_groups_members',
   })
   memberOfGroups: Group[];
 
-  @OneToMany((_type) => Expense, (expense) => expense.paidBy)
+  @OneToMany(() => Expense, (expense) => expense.paidBy)
   expenses: Expense[];
 
-  @OneToMany((_type) => Expense, (expense) => expense.receivedBy)
+  @OneToMany(() => Expense, (expense) => expense.receivedBy)
   incomes: Expense[];
   userId: any;
 }

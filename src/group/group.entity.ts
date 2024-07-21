@@ -17,12 +17,12 @@ export class Group {
   @Column()
   name: string;
 
-  @ManyToMany((_type) => User, (user) => user.memberOfGroups)
+  @ManyToMany(() => User, (user) => user.memberOfGroups)
   members: User[];
 
-  @ManyToOne((_type) => User, (user) => user.ownedGroups)
+  @ManyToOne(() => User, (user) => user.ownedGroups)
   owner: User;
 
-  @OneToMany((_type) => Expense, (expense) => expense.group)
+  @OneToMany(() => Expense, (expense) => expense.group)
   expenses: Expense[];
 }

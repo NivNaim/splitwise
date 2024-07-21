@@ -1,13 +1,6 @@
-import { group } from 'console';
 import { User } from 'src/auth/user.entity';
 import { Group } from 'src/group/group.entity';
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Expense {
@@ -20,16 +13,16 @@ export class Expense {
   @Column('decimal')
   value: number;
 
-  @ManyToOne((_type) => User, (user) => user.expenses)
+  @ManyToOne(() => User, (user) => user.expenses)
   paidBy: User;
 
-  @ManyToOne((_type) => User, (user) => user.incomes)
+  @ManyToOne(() => User, (user) => user.incomes)
   receivedBy: User;
 
   @Column({ default: false })
   isPaid: boolean;
 
-  @ManyToOne((_type) => Group, (group) => group.expenses)
+  @ManyToOne(() => Group, (group) => group.expenses)
   group: Group;
 
   @Column()

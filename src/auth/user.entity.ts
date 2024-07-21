@@ -37,4 +37,5 @@ export class User {
 
   @OneToMany((_type) => Expense, (expense) => expense.receivedBy)
   incomes: Expense[];
+  userId: any;
 }

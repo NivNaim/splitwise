@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -34,6 +35,14 @@ export class UsersRepository extends Repository<User> {
       } else {
         throw new InternalServerErrorException();
       }
+    }
+  }
+
+  async getUserByUsername(username: string): Promise<User> {
+    try {
+      return await this.findOne({ where: { username } });
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 }

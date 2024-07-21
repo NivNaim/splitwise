@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import {
   SignInCredentialsDto,
   SignUpCredentialsDto,
-} from './dto/auth-credentials.dto';
+} from './dtos/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
 

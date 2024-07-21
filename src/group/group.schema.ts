@@ -1,5 +1,5 @@
-import { User } from 'src/auth/user.entity';
-import { Expense } from 'src/expense/expense.entity';
+import { User } from 'src/auth/schemas/user.schema';
+import { Expense } from 'src/expense/expense.schema';
 import {
   Column,
   Entity,

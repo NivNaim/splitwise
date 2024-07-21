@@ -1,5 +1,5 @@
-import { Expense } from 'src/expense/expense.entity';
-import { Group } from 'src/group/group.entity';
+import { Expense } from 'src/expense/expense.schema';
+import { Group } from 'src/group/group.schema';
 import {
   Entity,
   Column,

@@ -1,5 +1,5 @@
-import { User } from 'src/auth/user.entity';
-import { Group } from 'src/group/group.entity';
+import { User } from 'src/auth/schemas/user.schema';
+import { Group } from 'src/group/group.schema';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

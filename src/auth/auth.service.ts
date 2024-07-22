@@ -22,7 +22,6 @@ export class AuthService {
   ): Promise<{ accessToken: string }> {
     const user = await this.usersRepository.createUser(signUpCredentialsDto);
     const accessToken = await this.getJwtToken({
-      userId: user.id,
       username: user.username,
     });
     return { accessToken };
@@ -36,8 +35,7 @@ export class AuthService {
     const user = await this.usersRepository.getUserByUsername(username);
     if (user && (await bcrypt.compare(password, user.password))) {
       const accessToken = await this.getJwtToken({
-        userId: user.id,
-        username: user.username,
+        username,
       });
       return { accessToken };
     } else {

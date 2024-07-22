@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { User } from 'src/auth/user.schema';
 import { Expense } from 'src/expense/expense.schema';
 import {
@@ -21,6 +22,7 @@ export class Group {
   members: User[];
 
   @ManyToOne(() => User, (user) => user.ownedGroups)
+  @Exclude({ toPlainOnly: true })
   owner: User;
 
   @OneToMany(() => Expense, (expense) => expense.group)

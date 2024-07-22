@@ -2,12 +2,17 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './jwt.strategy';
+import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private jwtStrategy: JwtStrategy,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
     const token = request.cookies['user_token'];
 
@@ -17,8 +22,8 @@ export class JwtGuard implements CanActivate {
 
     try {
       const secret = this.configService.get<string>('JWT_SECRET');
-      const decoded = jwt.verify(token, secret);
-      request.user = decoded;
+      const decoded = jwt.verify(token, secret) as JwtPayload;
+      request.user = await this.jwtStrategy.validate(decoded);
       return true;
     } catch (error) {
       return false;

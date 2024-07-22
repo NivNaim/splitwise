@@ -17,8 +17,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
-    return this.usersRepository.createUser(signUpCredentialsDto);
+  async signUp(
+    signUpCredentialsDto: SignUpCredentialsDto,
+  ): Promise<{ accessToken: string }> {
+    const user = await this.usersRepository.createUser(signUpCredentialsDto);
+    const accessToken = await this.getJwtToken({
+      userId: user.id,
+      username: user.username,
+    });
+    return { accessToken };
   }
 
   async signIn(
@@ -28,10 +35,18 @@ export class AuthService {
 
     const user = await this.usersRepository.getUserByUsername(username);
     if (user && (await bcrypt.compare(password, user.password))) {
-      const payload: JwtPayload = { userId: user.id, username: user.username };
-      return { accessToken: await this.jwtService.signAsync(payload) };
+      const accessToken = await this.getJwtToken({
+        userId: user.id,
+        username: user.username,
+      });
+      return { accessToken };
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
+  }
+
+  public async getJwtToken(jwtPayload: JwtPayload): Promise<string> {
+    const payload = jwtPayload;
+    return this.jwtService.signAsync(payload);
   }
 }

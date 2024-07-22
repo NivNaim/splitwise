@@ -7,7 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { Group } from './group/group.schema';
 import { Expense } from './expense/expense.schema';
-import { User } from './auth/schemas/user.schema';
+import { User } from './auth/user.schema';
 
 @Module({
   imports: [
@@ -32,6 +32,7 @@ import { User } from './auth/schemas/user.schema';
     ConfigModule.forRoot({
       envFilePath: [`.env.stage.${process.env.STAGE}`],
       validationSchema: configValidationSchema,
+      isGlobal: true,
     }),
   ],
 })

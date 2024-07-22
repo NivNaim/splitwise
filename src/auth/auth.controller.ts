@@ -10,20 +10,23 @@ import { Response } from 'express';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/signup')
+  @Post('signup')
   async signUp(
     @Body() signUpCredentialsDto: SignUpCredentialsDto,
-  ): Promise<void> {
-    return this.authService.signUp(signUpCredentialsDto);
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<{ message: string }> {
+    const { accessToken } = await this.authService.signUp(signUpCredentialsDto);
+    response.cookie('user_token', accessToken);
+    return { message: 'Registration successful' };
   }
 
-  @Post('/signin')
+  @Post('signin')
   async signIn(
     @Body() signInCredentialsDto: SignInCredentialsDto,
     @Res({ passthrough: true }) response: Response,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ message: string }> {
     const { accessToken } = await this.authService.signIn(signInCredentialsDto);
-    response.cookie('jwt', accessToken, { httpOnly: true, secure: true });
-    return { accessToken };
+    response.cookie('user_token', accessToken);
+    return { message: 'Login successful' };
   }
 }

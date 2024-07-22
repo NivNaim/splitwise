@@ -1,4 +1,4 @@
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/auth/user.schema';
 import { Group } from 'src/group/group.schema';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 

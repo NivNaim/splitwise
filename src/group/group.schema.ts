@@ -1,4 +1,4 @@
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/auth/user.schema';
 import { Expense } from 'src/expense/expense.schema';
 import {
   Column,

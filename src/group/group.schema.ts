@@ -21,7 +21,11 @@ export class Group {
   @Column({ nullable: true })
   description: string;
 
-  @ManyToMany(() => User, (user) => user.memberOfGroups)
+  @ManyToMany(() => User, (user) => user.memberOfGroups, {
+    cascade: true,
+    eager: false,
+  })
+  @Exclude({ toPlainOnly: true })
   members: User[];
 
   @ManyToOne(() => User, (user) => user.ownedGroups)

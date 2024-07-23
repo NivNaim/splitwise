@@ -25,6 +25,7 @@ export class GroupsRepository extends Repository<Group> {
       name,
       owner,
       description,
+      members: [owner],
     });
 
     try {

@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -38,10 +39,18 @@ export class UsersRepository extends Repository<User> {
   }
 
   async getUserByUsername(username: string): Promise<User> {
+    let user: User;
+
     try {
-      return await this.findOne({ where: { username } });
+      user = await this.findOne({ where: { username } });
     } catch (error) {
       throw new InternalServerErrorException();
     }
+
+    if (!user) {
+      throw new NotFoundException(`User "${username}" not found`);
+    }
+
+    return user;
   }
 }

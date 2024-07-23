@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Group } from './group.schema';
@@ -18,11 +19,12 @@ export class GroupsRepository extends Repository<Group> {
     createGroupDto: CreateGroupDto,
     owner: User,
   ): Promise<Group> {
-    const { name } = createGroupDto;
+    const { name, description } = createGroupDto;
 
     const group = this.create({
       name,
       owner,
+      description,
     });
 
     try {
@@ -31,9 +33,23 @@ export class GroupsRepository extends Repository<Group> {
       if (error.code === '23505') {
         throw new ConflictException(`Group with name "${name}" already exists`);
       } else {
-        console.log(error);
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  async getGroupById(id: string): Promise<Group> {
+    let group: Group;
+    try {
+      group = await this.findOne({ where: { id }, relations: ['owner'] });
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+
+    if (!group) {
+      throw new NotFoundException(`Group with ID "${id}" not found`);
+    }
+
+    return group;
   }
 }

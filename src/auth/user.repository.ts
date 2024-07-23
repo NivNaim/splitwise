@@ -48,7 +48,7 @@ export class UsersRepository extends Repository<User> {
     }
 
     if (!user) {
-      throw new NotFoundException(`User "${username}" not found`);
+      throw new NotFoundException(`User with username "${username}" not found`);
     }
 
     return user;

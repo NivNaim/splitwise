@@ -18,6 +18,7 @@ export class GroupsRepository extends Repository<Group> {
   async createGroup(
     createGroupDto: CreateGroupDto,
     owner: User,
+    members: User[] = [],
   ): Promise<Group> {
     const { name, description } = createGroupDto;
 
@@ -25,7 +26,7 @@ export class GroupsRepository extends Repository<Group> {
       name,
       owner,
       description,
-      members: [owner],
+      members: [owner, ...members],
     });
 
     try {

@@ -5,19 +5,28 @@ import { GroupsRepository } from './group.repository';
 import { Group } from './group.schema';
 import { User } from 'src/auth/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
+import { UsersRepository } from 'src/auth/user.repository';
 
 @Injectable()
 export class GroupService {
   constructor(
     @InjectRepository(GroupsRepository)
     private groupsRepository: GroupsRepository,
+    private usersRepository: UsersRepository,
   ) {}
 
   async createGroup(
     createGroupDto: CreateGroupDto,
     owner: User,
   ): Promise<Group> {
-    return this.groupsRepository.createGroup(createGroupDto, owner);
+    const { usernames } = createGroupDto;
+
+    const members: User[] = [];
+    for (let i = 0; i < usernames.length; i++) {
+      members.push(await this.usersRepository.getUserByUsername(usernames[i]));
+    }
+
+    return this.groupsRepository.createGroup(createGroupDto, owner, members);
   }
 
   async updateGroup(

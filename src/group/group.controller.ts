@@ -3,6 +3,7 @@ import { CreateGroupDto } from './dtos/create-group.dto';
 import {
   Body,
   Controller,
+  Get,
   Param,
   Patch,
   Post,
@@ -34,5 +35,10 @@ export class GroupsController {
     @Body() updateGroupDto: UpdateGroupDto,
   ): Promise<Group> {
     return await this.groupService.updateGroup(id, updateGroupDto, user);
+  }
+
+  @Get()
+  async getGroups(@getUser() user: User): Promise<Group[]> {
+    return await this.groupService.getGroups(user);
   }
 }

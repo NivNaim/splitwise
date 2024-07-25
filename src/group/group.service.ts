@@ -1,11 +1,16 @@
 import { CreateGroupDto } from './dtos/create-group.dto';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupsRepository } from './group.repository';
 import { Group } from './group.schema';
 import { User } from 'src/auth/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
 import { UsersRepository } from 'src/auth/user.repository';
+import { getUser } from 'src/auth/decorators/get-user.decorator';
 
 @Injectable()
 export class GroupService {
@@ -44,5 +49,15 @@ export class GroupService {
 
     Object.assign(group, updateGroupDto);
     return await this.groupsRepository.save(group);
+  }
+
+  async getGroups(user: User): Promise<Group[]> {
+    const groups = await this.groupsRepository.getGroups(user);
+
+    if (!groups || groups.length === 0) {
+      throw new NotFoundException();
+    }
+
+    return groups;
   }
 }

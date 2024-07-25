@@ -5,11 +5,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GroupsRepository } from './group.repository';
+import { GroupsRepository } from './groups.repository';
 import { Group } from './group.schema';
 import { User } from 'src/auth/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
-import { UsersRepository } from 'src/auth/user.repository';
+import { UsersRepository } from 'src/auth/users.repository';
 import { getUser } from 'src/auth/decorators/get-user.decorator';
 
 @Injectable()

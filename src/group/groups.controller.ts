@@ -12,7 +12,7 @@ import {
 import { getUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/user.schema';
 import { Group } from './group.schema';
-import { GroupService } from './group.service';
+import { GroupService } from './groups.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 
 @Controller('group')

@@ -8,7 +8,7 @@ export class Expense {
   id: string;
 
   @Column()
-  transferReason: string;
+  cause: string;
 
   @Column('decimal')
   value: number;

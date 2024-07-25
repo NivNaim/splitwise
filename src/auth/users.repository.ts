@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { SignUpCredentialsDto } from './dtos/auth-credentials.dto';
 import { User } from './user.schema';
@@ -52,5 +52,28 @@ export class UsersRepository extends Repository<User> {
     }
 
     return user;
+  }
+
+  async getUsersByUsernames(usernames: string[]): Promise<User[]> {
+    if (!usernames || usernames.length === 0) {
+      throw new NotFoundException(`No usernames provided`);
+    }
+
+    let users: User[];
+
+    try {
+      users = await this.find({ where: { username: In(usernames) } });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error fetching users',
+        error.message,
+      );
+    }
+
+    if (!users || users.length === 0) {
+      throw new NotFoundException(`Users with provided usernames not found`);
+    }
+
+    return users;
   }
 }

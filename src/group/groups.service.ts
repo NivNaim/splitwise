@@ -26,10 +26,7 @@ export class GroupService {
   ): Promise<Group> {
     const { usernames } = createGroupDto;
 
-    const members: User[] = [];
-    for (let i = 0; i < usernames.length; i++) {
-      members.push(await this.usersRepository.getUserByUsername(usernames[i]));
-    }
+    const members = await this.usersRepository.getUsersByUsernames(usernames);
 
     return this.groupsRepository.createGroup(createGroupDto, owner, members);
   }

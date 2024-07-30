@@ -8,6 +8,7 @@ import {
 } from './dtos/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
+import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
     const { username, password } = signInCredentialsDto;
 
     const user = await this.usersRepository.getUserByUniqueField(
-      UserUniqueKeys.USERNAME,
+      UserUniqueKey.USERNAME,
       username,
     );
     if (user && (await bcrypt.compare(password, user.password))) {

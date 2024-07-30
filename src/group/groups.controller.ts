@@ -43,7 +43,11 @@ export class GroupsController {
   }
 
   @Post('add-user/:id/:userId')
-  async addUser(@getUser() user: User, @Param('userId') userId: string) {
+  async addUser(
+    @getUser() user: User,
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+  ) {
     return await this.groupService.addUser(user, userId);
   }
 }

@@ -64,6 +64,6 @@ export class GroupService {
       userId,
     );
 
-    console.log(userToAdd);
+    const existingGroup = await this.groupsRepository.getGroupById;
   }
 }

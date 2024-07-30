@@ -50,4 +50,13 @@ export class GroupsController {
   ): Promise<Group> {
     return await this.groupService.addUserToGroup(user, groupId, userId);
   }
+
+  @Patch('remove-user/:groupId/:userId')
+  async removeUserFromGroup(
+    @getUser() user: User,
+    @Param('groupId') groupId: string,
+    @Param('userId') userId: string,
+  ): Promise<Group> {
+    return await this.groupService.removeUserFromGroup(user, groupId, userId);
+  }
 }

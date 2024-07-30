@@ -79,6 +79,39 @@ export class GroupService {
 
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
+    if (
+      user.id !== existingGroup.owner.id &&
+      !existingGroup.members.some((member) => member.id === user.id)
+    ) {
+      throw new ForbiddenException(
+        'User is not allowed to add members to this group.',
+      );
+    }
+
     return await this.groupsRepository.addUserToGroup(existingGroup, userToAdd);
+  }
+
+  async removeUserFromGroup(
+    user: User,
+    groupId: string,
+    userId: string,
+  ): Promise<Group> {
+    const userToRemove = await this.usersRepository.getUserByUniqueKey(
+      UserUniqueKey.ID,
+      userId,
+    );
+
+    const existingGroup = await this.groupsRepository.getGroupById(groupId);
+
+    if (user.id !== existingGroup.owner.id) {
+      throw new ForbiddenException(
+        'User is not allowed to add members to this group.',
+      );
+    }
+
+    return await this.groupsRepository.removeUserFromGroup(
+      existingGroup,
+      userToRemove,
+    );
   }
 }

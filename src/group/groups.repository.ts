@@ -89,7 +89,26 @@ export class GroupsRepository extends Repository<Group> {
   }
 
   async addUserToGroup(group: Group, user: User): Promise<Group> {
+    if (group.members.some((member) => member.id === user.id)) {
+      throw new ConflictException(
+        `User '${user.username}' already exist in group '${group.name}'`,
+      );
+    }
     group.members.push(user);
+
+    try {
+      return await this.save(group);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async removeUserFromGroup(group: Group, user: User): Promise<Group> {
+    const filteredMembers = group.members.filter(
+      (member) => member.id !== user.id,
+    );
+
+    Object.assign(group.members, filteredMembers);
 
     try {
       return await this.save(group);

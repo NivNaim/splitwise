@@ -42,12 +42,12 @@ export class GroupsController {
     return await this.groupService.getGroups(user);
   }
 
-  @Post('add-user/:id/:userId')
-  async addUser(
+  @Post('add-user/:groupId/:userId')
+  async addUserToGroup(
     @getUser() user: User,
-    @Param('id') id: string,
+    @Param('groupId') groupId: string,
     @Param('userId') userId: string,
-  ) {
-    return await this.groupService.addUser(user, userId);
+  ): Promise<Group> {
+    return await this.groupService.addUserToGroup(user, groupId, userId);
   }
 }

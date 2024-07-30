@@ -43,7 +43,7 @@ export class UsersRepository extends Repository<User> {
     }
   }
 
-  async getUserByUniqueField(
+  async getUserByUniqueKey(
     uniqueKey: UserUniqueKey,
     value: string,
   ): Promise<User> {
@@ -78,10 +78,7 @@ export class UsersRepository extends Repository<User> {
     try {
       users = await this.find({ where: { username: In(usernames) } });
     } catch (error) {
-      throw new InternalServerErrorException(
-        'Error fetching users',
-        error.message,
-      );
+      throw new InternalServerErrorException();
     }
 
     if (!users || users.length === 0) {

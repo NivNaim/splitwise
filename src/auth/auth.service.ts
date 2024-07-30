@@ -33,7 +33,7 @@ export class AuthService {
   ): Promise<{ accessToken: string }> {
     const { username, password } = signInCredentialsDto;
 
-    const user = await this.usersRepository.getUserByUniqueField(
+    const user = await this.usersRepository.getUserByUniqueKey(
       UserUniqueKey.USERNAME,
       username,
     );

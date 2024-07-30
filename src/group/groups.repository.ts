@@ -8,6 +8,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Group } from './group.schema';
 import { CreateGroupDto } from './dtos/create-group.dto';
 import { User } from 'src/auth/user.schema';
+import { UpdateGroupDto } from './dtos/update-group.dto';
 
 @Injectable()
 export class GroupsRepository extends Repository<Group> {
@@ -40,10 +41,26 @@ export class GroupsRepository extends Repository<Group> {
     }
   }
 
+  async updateGroup(
+    group: Group,
+    updateGroupDto: UpdateGroupDto,
+  ): Promise<Group> {
+    Object.assign(group, updateGroupDto);
+
+    try {
+      return await this.save(group);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
   async getGroupById(id: string): Promise<Group> {
     let group: Group;
     try {
-      group = await this.findOne({ where: { id }, relations: ['owner'] });
+      group = await this.findOne({
+        where: { id },
+        relations: ['owner', 'members'],
+      });
     } catch (error) {
       throw new InternalServerErrorException();
     }
@@ -66,6 +83,16 @@ export class GroupsRepository extends Repository<Group> {
     try {
       const groups = await query.getMany();
       return groups;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async addUserToGroup(group: Group, user: User): Promise<Group> {
+    group.members.push(user);
+
+    try {
+      return await this.save(group);
     } catch (error) {
       throw new InternalServerErrorException();
     }

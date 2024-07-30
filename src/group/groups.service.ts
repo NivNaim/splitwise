@@ -28,6 +28,16 @@ export class GroupService {
 
     const members = await this.usersRepository.getUsersByUsernames(usernames);
 
+    if (members.length !== usernames.length) {
+      const foundUsernames = members.map((member) => member.username);
+      const notFoundUsernames = usernames.filter(
+        (username) => !foundUsernames.includes(username),
+      );
+      throw new NotFoundException(
+        `Users not found for the following usernames: ${notFoundUsernames.join(', ')}`,
+      );
+    }
+
     return this.groupsRepository.createGroup(createGroupDto, owner, members);
   }
 
@@ -44,8 +54,7 @@ export class GroupService {
       );
     }
 
-    Object.assign(group, updateGroupDto);
-    return await this.groupsRepository.save(group);
+    return await this.groupsRepository.updateGroup(group, updateGroupDto);
   }
 
   async getGroups(user: User): Promise<Group[]> {
@@ -58,12 +67,18 @@ export class GroupService {
     return groups;
   }
 
-  async addUser(user: User, userId: string) {
-    const userToAdd = await this.usersRepository.getUserByUniqueField(
+  async addUserToGroup(
+    user: User,
+    groupId: string,
+    userId: string,
+  ): Promise<Group> {
+    const userToAdd = await this.usersRepository.getUserByUniqueKey(
       UserUniqueKey.ID,
       userId,
     );
 
-    const existingGroup = await this.groupsRepository.getGroupById;
+    const existingGroup = await this.groupsRepository.getGroupById(groupId);
+
+    return await this.groupsRepository.addUserToGroup(existingGroup, userToAdd);
   }
 }

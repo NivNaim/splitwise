@@ -9,6 +9,10 @@ import { DataSource, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { SignUpCredentialsDto } from './dtos/auth-credentials.dto';
 import { User } from './user.schema';
+import {
+  isUserUniqueKey,
+  UserUniqueKey,
+} from 'src/enums/user-unique-keys.enum';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -40,7 +44,7 @@ export class UsersRepository extends Repository<User> {
   }
 
   async getUserByUniqueField(
-    uniqueKey: UserUniqueKeys,
+    uniqueKey: UserUniqueKey,
     value: string,
   ): Promise<User> {
     let user: User;

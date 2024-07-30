@@ -10,7 +10,7 @@ import { Group } from './group.schema';
 import { User } from 'src/auth/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
 import { UsersRepository } from 'src/auth/users.repository';
-import { getUser } from 'src/auth/decorators/get-user.decorator';
+import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 
 @Injectable()
 export class GroupService {
@@ -56,5 +56,14 @@ export class GroupService {
     }
 
     return groups;
+  }
+
+  async addUser(user: User, userId: string) {
+    const userToAdd = await this.usersRepository.getUserByUniqueField(
+      UserUniqueKey.ID,
+      userId,
+    );
+
+    console.log(userToAdd);
   }
 }

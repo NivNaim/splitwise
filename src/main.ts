@@ -7,7 +7,7 @@ import { TransformInterceptor } from './transform.interceptor';
 declare const module: any;
 
 async function bootstrap() {
-  const { PORT, JWT_SECRET } = process.env;
+  const { PORT } = process.env;
 
   const logger = new Logger();
   const app = await NestFactory.create(AppModule);

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -38,17 +39,26 @@ export class UsersRepository extends Repository<User> {
     }
   }
 
-  async getUserByUsername(username: string): Promise<User> {
+  async getUserByUniqueField(
+    uniqueKey: UserUniqueKeys,
+    value: string,
+  ): Promise<User> {
     let user: User;
 
+    if (!isUserUniqueKey(uniqueKey)) {
+      throw new BadRequestException(`Invalid unique key "${uniqueKey}"`);
+    }
+
     try {
-      user = await this.findOne({ where: { username } });
+      user = await this.findOne({ where: { [uniqueKey]: value } });
     } catch (error) {
       throw new InternalServerErrorException();
     }
 
     if (!user) {
-      throw new NotFoundException(`User with username "${username}" not found`);
+      throw new NotFoundException(
+        `User with ${uniqueKey} "${value}" not found`,
+      );
     }
 
     return user;

@@ -32,7 +32,10 @@ export class AuthService {
   ): Promise<{ accessToken: string }> {
     const { username, password } = signInCredentialsDto;
 
-    const user = await this.usersRepository.getUserByUsername(username);
+    const user = await this.usersRepository.getUserByUniqueField(
+      UserUniqueKeys.USERNAME,
+      username,
+    );
     if (user && (await bcrypt.compare(password, user.password))) {
       const accessToken = await this.getJwtToken({
         username,

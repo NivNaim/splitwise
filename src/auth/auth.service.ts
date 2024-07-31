@@ -14,8 +14,8 @@ import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 export class AuthService {
   constructor(
     @InjectRepository(UsersRepository)
-    private usersRepository: UsersRepository,
-    private jwtService: JwtService,
+    private readonly usersRepository: UsersRepository,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signUp(

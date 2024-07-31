@@ -18,7 +18,7 @@ import { JwtGuard } from 'src/auth/jwt.guard';
 @Controller('group')
 @UseGuards(JwtGuard)
 export class GroupsController {
-  constructor(private groupsService: GroupsService) {}
+  constructor(private readonly groupsService: GroupsService) {}
 
   @Post()
   async createGroup(

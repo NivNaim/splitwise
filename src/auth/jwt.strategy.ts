@@ -12,7 +12,7 @@ import { Request } from 'express';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(UsersRepository)
-    private usersRepository: UsersRepository,
+    private readonly usersRepository: UsersRepository,
     configService: ConfigService,
   ) {
     super({

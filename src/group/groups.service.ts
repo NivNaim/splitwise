@@ -16,8 +16,8 @@ import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 export class GroupsService {
   constructor(
     @InjectRepository(GroupsRepository)
-    private groupsRepository: GroupsRepository,
-    private usersRepository: UsersRepository,
+    private readonly groupsRepository: GroupsRepository,
+    private readonly usersRepository: UsersRepository,
   ) {}
 
   async createGroup(

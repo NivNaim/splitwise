@@ -14,6 +14,8 @@ import { User } from 'src/auth/user.schema';
 import { Group } from './group.schema';
 import { GroupsService } from './groups.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
+import { TransformedGroupDto } from './dtos/transformed-group.dto';
+import { transformGroupToDto } from 'src/utils/transform-group-to-dto';
 
 @Controller('group')
 @UseGuards(JwtGuard)
@@ -24,8 +26,9 @@ export class GroupsController {
   async createGroup(
     @getUser() user: User,
     @Body() createGroupDto: CreateGroupDto,
-  ): Promise<Group> {
-    return await this.groupsService.createGroup(createGroupDto, user);
+  ): Promise<TransformedGroupDto> {
+    const group = await this.groupsService.createGroup(createGroupDto, user);
+    return transformGroupToDto(group);
   }
 
   @Patch(':id')
@@ -33,8 +36,13 @@ export class GroupsController {
     @Param('id') id: string,
     @getUser() user: User,
     @Body() updateGroupDto: UpdateGroupDto,
-  ): Promise<Group> {
-    return await this.groupsService.updateGroup(id, updateGroupDto, user);
+  ): Promise<TransformedGroupDto> {
+    const group = await this.groupsService.updateGroup(
+      id,
+      updateGroupDto,
+      user,
+    );
+    return transformGroupToDto(group);
   }
 
   @Get()
@@ -47,8 +55,13 @@ export class GroupsController {
     @getUser() user: User,
     @Param('groupId') groupId: string,
     @Param('userId') userId: string,
-  ): Promise<Group> {
-    return await this.groupsService.addUserToGroup(user, groupId, userId);
+  ): Promise<TransformedGroupDto> {
+    const group = await this.groupsService.addUserToGroup(
+      user,
+      groupId,
+      userId,
+    );
+    return transformGroupToDto(group);
   }
 
   @Patch('remove-user/:groupId/:userId')
@@ -56,7 +69,12 @@ export class GroupsController {
     @getUser() user: User,
     @Param('groupId') groupId: string,
     @Param('userId') userId: string,
-  ): Promise<Group> {
-    return await this.groupsService.removeUserFromGroup(user, groupId, userId);
+  ): Promise<TransformedGroupDto> {
+    const group = await this.groupsService.removeUserFromGroup(
+      user,
+      groupId,
+      userId,
+    );
+    return transformGroupToDto(group);
   }
 }

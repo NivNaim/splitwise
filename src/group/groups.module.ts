@@ -9,5 +9,6 @@ import { GroupsService } from './groups.service';
   imports: [AuthModule, TypeOrmModule.forFeature([GroupsRepository])],
   controllers: [GroupsController],
   providers: [GroupsService, GroupsRepository],
+  exports: [GroupsRepository],
 })
 export class GroupsModule {}

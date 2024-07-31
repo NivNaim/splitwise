@@ -109,6 +109,14 @@ export class GroupsService {
       );
     }
 
+    if (
+      !existingGroup.members.some((member) => member.id === userToRemove.id)
+    ) {
+      throw new NotFoundException(
+        `User with ID '${userId}' is not a member of the group.`,
+      );
+    }
+
     return await this.groupsRepository.removeUserFromGroup(
       existingGroup,
       userToRemove,

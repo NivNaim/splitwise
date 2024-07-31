@@ -21,12 +21,9 @@ export class GroupsRepository extends Repository<Group> {
     owner: User,
     members: User[] = [],
   ): Promise<Group> {
-    const { name, description } = createGroupDto;
-
     const group = this.create({
-      name,
+      ...createGroupDto,
       owner,
-      description,
       members: [owner, ...members],
     });
 
@@ -73,12 +70,13 @@ export class GroupsRepository extends Repository<Group> {
   }
 
   async getGroups(user: User): Promise<Group[]> {
-    const query = this.createQueryBuilder('group').innerJoin(
-      'group.members',
-      'member',
-      'member.id = :userId',
-      { userId: user.id },
-    );
+    const query = this.createQueryBuilder('group')
+      .innerJoin('group.members', 'member', 'member.id = :userId', {
+        userId: user.id,
+      })
+      .leftJoin('group.members', 'members')
+      .select(['group.id', 'group.name', 'group.description'])
+      .addSelect('members.id');
 
     try {
       const groups = await query.getMany();
@@ -108,7 +106,7 @@ export class GroupsRepository extends Repository<Group> {
       (member) => member.id !== user.id,
     );
 
-    Object.assign(group.members, filteredMembers);
+    group.members = filteredMembers;
 
     try {
       return await this.save(group);

@@ -3,11 +3,11 @@ import { AuthModule } from 'src/auth/auth.module';
 import { GroupsController } from './groups.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GroupsRepository } from './groups.repository';
-import { GroupService } from './groups.service';
+import { GroupsService } from './groups.service';
 
 @Module({
   imports: [AuthModule, TypeOrmModule.forFeature([GroupsRepository])],
   controllers: [GroupsController],
-  providers: [GroupService, GroupsRepository],
+  providers: [GroupsService, GroupsRepository],
 })
-export class GroupModule {}
+export class GroupsModule {}

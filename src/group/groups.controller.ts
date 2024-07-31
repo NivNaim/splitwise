@@ -12,20 +12,20 @@ import {
 import { getUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/user.schema';
 import { Group } from './group.schema';
-import { GroupService } from './groups.service';
+import { GroupsService } from './groups.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 
 @Controller('group')
 @UseGuards(JwtGuard)
 export class GroupsController {
-  constructor(private groupService: GroupService) {}
+  constructor(private groupsService: GroupsService) {}
 
   @Post()
   async createGroup(
     @getUser() user: User,
     @Body() createGroupDto: CreateGroupDto,
   ): Promise<Group> {
-    return await this.groupService.createGroup(createGroupDto, user);
+    return await this.groupsService.createGroup(createGroupDto, user);
   }
 
   @Patch(':id')
@@ -34,12 +34,12 @@ export class GroupsController {
     @getUser() user: User,
     @Body() updateGroupDto: UpdateGroupDto,
   ): Promise<Group> {
-    return await this.groupService.updateGroup(id, updateGroupDto, user);
+    return await this.groupsService.updateGroup(id, updateGroupDto, user);
   }
 
   @Get()
   async getGroups(@getUser() user: User): Promise<Group[]> {
-    return await this.groupService.getGroups(user);
+    return await this.groupsService.getGroups(user);
   }
 
   @Post('add-user/:groupId/:userId')
@@ -48,7 +48,7 @@ export class GroupsController {
     @Param('groupId') groupId: string,
     @Param('userId') userId: string,
   ): Promise<Group> {
-    return await this.groupService.addUserToGroup(user, groupId, userId);
+    return await this.groupsService.addUserToGroup(user, groupId, userId);
   }
 
   @Patch('remove-user/:groupId/:userId')
@@ -57,6 +57,6 @@ export class GroupsController {
     @Param('groupId') groupId: string,
     @Param('userId') userId: string,
   ): Promise<Group> {
-    return await this.groupService.removeUserFromGroup(user, groupId, userId);
+    return await this.groupsService.removeUserFromGroup(user, groupId, userId);
   }
 }

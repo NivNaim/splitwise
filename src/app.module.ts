@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GroupModule } from './group/groups.module';
-import { ExpenseModule } from './expense/expense.module';
+import { GroupsModule } from './group/groups.module';
+import { ExpensesModule } from './expense/expenses.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { Group } from './group/group.schema';
@@ -12,8 +12,8 @@ import { User } from './auth/user.schema';
 @Module({
   imports: [
     AuthModule,
-    GroupModule,
-    ExpenseModule,
+    GroupsModule,
+    ExpensesModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -13,7 +13,7 @@ import { UsersRepository } from 'src/auth/users.repository';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 
 @Injectable()
-export class GroupService {
+export class GroupsService {
   constructor(
     @InjectRepository(GroupsRepository)
     private groupsRepository: GroupsRepository,

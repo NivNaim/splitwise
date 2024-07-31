@@ -1,12 +1,16 @@
 import {
-  IsNotEmpty,
-  IsDecimal,
-  IsUUID,
-  IsOptional,
   IsBoolean,
+  IsDecimal,
+  IsNotEmpty,
+  IsOptional,
+  IsUUID,
 } from 'class-validator';
+import { Group } from 'src/group/group.schema';
 
-export class CreateExpenseDto {
+export class TransformedExpenseDto {
+  @IsUUID()
+  id: string;
+
   @IsNotEmpty()
   cause: string;
 
@@ -23,8 +27,8 @@ export class CreateExpenseDto {
   @IsBoolean()
   isPaid: boolean;
 
-  @IsUUID()
-  groupId: string;
+  @IsNotEmpty()
+  group: Group;
 
   @IsOptional()
   createdAt: string;

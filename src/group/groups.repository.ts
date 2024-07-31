@@ -74,9 +74,8 @@ export class GroupsRepository extends Repository<Group> {
       .innerJoin('group.members', 'member', 'member.id = :userId', {
         userId: user.id,
       })
-      .leftJoin('group.members', 'members')
-      .select(['group.id', 'group.name', 'group.description'])
-      .addSelect('members.id');
+      .leftJoinAndSelect('group.expenses', 'expenses')
+      .select(['group.id', 'group.name', 'group.description', 'expenses']);
 
     try {
       const groups = await query.getMany();

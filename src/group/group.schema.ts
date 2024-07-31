@@ -32,6 +32,6 @@ export class Group {
   @Exclude({ toPlainOnly: true })
   owner: User;
 
-  @OneToMany(() => Expense, (expense) => expense.group)
+  @OneToMany(() => Expense, (expense) => expense.group, { eager: true })
   expenses: Expense[];
 }

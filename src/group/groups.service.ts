@@ -71,8 +71,8 @@ export class GroupsService {
     return transformGroupToDto(updatedGroup);
   }
 
-  async getGroups(user: User): Promise<Group[]> {
-    const groups = await this.groupsRepository.getGroups(user);
+  async getUserGroups(user: User): Promise<Group[]> {
+    const groups = await this.groupsRepository.getUserGroups(user);
 
     if (!groups || groups.length === 0) {
       throw new NotFoundException();

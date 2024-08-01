@@ -69,7 +69,7 @@ export class GroupsRepository extends Repository<Group> {
     return group;
   }
 
-  async getGroups(user: User): Promise<Group[]> {
+  async getUserGroups(user: User): Promise<Group[]> {
     const query = this.createQueryBuilder('group')
       .innerJoin('group.members', 'member', 'member.id = :userId', {
         userId: user.id,

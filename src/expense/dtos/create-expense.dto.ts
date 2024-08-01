@@ -21,7 +21,7 @@ export class CreateExpenseDto {
 
   @IsOptional()
   @IsBoolean()
-  isPaid: boolean;
+  isPaid?: boolean;
 
   @IsUUID()
   groupId: string;

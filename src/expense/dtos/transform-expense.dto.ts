@@ -25,11 +25,11 @@ export class TransformedExpenseDto {
 
   @IsOptional()
   @IsBoolean()
-  isPaid: boolean;
+  isPaid?: boolean;
 
   @IsNotEmpty()
   group: Group;
 
   @IsOptional()
-  createdAt: string;
+  createdAt?: string;
 }

@@ -30,7 +30,7 @@ export class ExpensesService {
   ): Promise<TransformedExpenseDto> {
     const { groupId, paidById, paidOnId } = createExpenseDto;
 
-    if (user.id !== paidById && user.id !== paidOnId) {
+    if (!this.isUserInvolvedInExpense(user.id, paidById, paidOnId)) {
       throw new UnauthorizedException(
         'You can only create expenses for yourself.',
       );
@@ -74,7 +74,13 @@ export class ExpensesService {
   ): Promise<TransformedExpenseDto> {
     const expense = await this.expensesRepository.getExpenseById(expenseId);
 
-    if (expense.paidBy.id !== user.id && expense.paidOn.id !== user.id) {
+    if (
+      !this.isUserInvolvedInExpense(
+        user.id,
+        expense.paidBy.id,
+        expense.paidOn.id,
+      )
+    ) {
       throw new UnauthorizedException(
         'You can only update expenses for yourself.',
       );
@@ -86,5 +92,13 @@ export class ExpensesService {
     );
 
     return transformExpenseToDto(updatedExpense);
+  }
+
+  isUserInvolvedInExpense(
+    userId: string,
+    paidById: string,
+    paidOnId: string,
+  ): boolean {
+    return userId === paidById && userId !== paidOnId;
   }
 }

@@ -6,7 +6,8 @@ import { GroupsRepository } from 'src/group/groups.repository';
 import { UsersRepository } from 'src/auth/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
-import { Expense } from './expense.schema';
+import { TransformedExpenseDto } from './dtos/transform-expense.dto';
+import { transformExpenseToDto } from 'src/utils/transform-to-dto.util';
 
 @Injectable()
 export class ExpensesService {
@@ -20,7 +21,7 @@ export class ExpensesService {
   async createExpense(
     user: User,
     createExpenseDto: CreateExpenseDto,
-  ): Promise<Expense> {
+  ): Promise<TransformedExpenseDto> {
     const { groupId, paidById, paidOnId } = createExpenseDto;
 
     if (user.id !== paidById && user.id !== paidOnId) {
@@ -41,11 +42,13 @@ export class ExpensesService {
       paidOnId,
     );
 
-    return await this.expensesReporitory.createExpense(
+    const expense = await this.expensesReporitory.createExpense(
       group,
       paidByUser,
       paidOnUser,
       createExpenseDto,
     );
+
+    return transformExpenseToDto(expense);
   }
 }

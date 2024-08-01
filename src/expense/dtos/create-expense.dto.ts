@@ -1,16 +1,16 @@
 import {
   IsNotEmpty,
-  IsDecimal,
   IsUUID,
   IsOptional,
   IsBoolean,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateExpenseDto {
   @IsNotEmpty()
   cause: string;
 
-  @IsDecimal()
+  @IsNumber({ maxDecimalPlaces: 2 })
   value: number;
 
   @IsUUID()

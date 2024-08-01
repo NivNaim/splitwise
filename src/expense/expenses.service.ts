@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ExpensesRepository } from './expenses.repository';
@@ -14,6 +13,8 @@ import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';
 import { transformExpenseToDto } from 'src/utils/transform-to-dto.util';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
+import { isMemberInGroup } from 'src/utils/is-member-in-group.util';
+import { isUserInvolvedInExpense } from 'src/utils/is-user-involved-in-expense.util';
 
 @Injectable()
 export class ExpensesService {
@@ -30,7 +31,7 @@ export class ExpensesService {
   ): Promise<TransformedExpenseDto> {
     const { groupId, paidById, paidOnId } = createExpenseDto;
 
-    if (!this.isUserInvolvedInExpense(user.id, paidById, paidOnId)) {
+    if (!isUserInvolvedInExpense(user.id, paidById, paidOnId)) {
       throw new UnauthorizedException(
         'You can only create expenses for yourself.',
       );
@@ -39,8 +40,8 @@ export class ExpensesService {
     const group = await this.groupsRepository.getGroupById(groupId);
 
     if (
-      !group.members.some((member) => member.id === paidById) ||
-      !group.members.some((member) => member.id === paidOnId)
+      !isMemberInGroup(group.members, paidById) ||
+      !isMemberInGroup(group.members, paidOnId)
     ) {
       throw new BadRequestException(
         'Both paidBy and paidOn users must be members of the group.',
@@ -75,11 +76,7 @@ export class ExpensesService {
     const expense = await this.expensesRepository.getExpenseById(expenseId);
 
     if (
-      !this.isUserInvolvedInExpense(
-        user.id,
-        expense.paidBy.id,
-        expense.paidOn.id,
-      )
+      !isUserInvolvedInExpense(user.id, expense.paidBy.id, expense.paidOn.id)
     ) {
       throw new UnauthorizedException(
         'You can only update expenses for yourself.',
@@ -92,13 +89,5 @@ export class ExpensesService {
     );
 
     return transformExpenseToDto(updatedExpense);
-  }
-
-  isUserInvolvedInExpense(
-    userId: string,
-    paidById: string,
-    paidOnId: string,
-  ): boolean {
-    return userId === paidById && userId !== paidOnId;
   }
 }

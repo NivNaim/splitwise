@@ -14,6 +14,7 @@ import { UsersRepository } from 'src/auth/users.repository';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { transformGroupToDto } from 'src/utils/transform-to-dto.util';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
+import { isOwner } from 'src/utils/is-owner.util';
 
 @Injectable()
 export class GroupsService {
@@ -58,7 +59,7 @@ export class GroupsService {
   ): Promise<TransformedGroupDto> {
     const group = await this.groupsRepository.getGroupById(groupId);
 
-    if (!this.isOwner(user.id, group.owner.id)) {
+    if (!isOwner(user.id, group.owner.id)) {
       throw new ForbiddenException(
         'You are not authorized to update this group',
       );
@@ -95,7 +96,7 @@ export class GroupsService {
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
     if (
-      !this.isOwner(user.id, existingGroup.owner.id) &&
+      !isOwner(user.id, existingGroup.owner.id) &&
       !existingGroup.members.some((member) => member.id === user.id)
     ) {
       throw new ForbiddenException(
@@ -123,7 +124,7 @@ export class GroupsService {
 
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
-    if (!this.isOwner(user.id, existingGroup.owner.id)) {
+    if (!isOwner(user.id, existingGroup.owner.id)) {
       throw new ForbiddenException(
         'User is not allowed to add members to this group.',
       );
@@ -148,7 +149,7 @@ export class GroupsService {
   async deleteGroup(user: User, groupId: string): Promise<void> {
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
-    if (!this.isOwner(user.id, existingGroup.owner.id)) {
+    if (!isOwner(user.id, existingGroup.owner.id)) {
       throw new ForbiddenException('Only the owner can delete the group.');
     }
 
@@ -162,9 +163,5 @@ export class GroupsService {
     }
 
     await this.groupsRepository.deleteGroupById(existingGroup);
-  }
-
-  isOwner(userId: string, ownerId: string): boolean {
-    return userId === ownerId;
   }
 }

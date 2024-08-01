@@ -40,8 +40,8 @@ export class GroupsController {
   }
 
   @Get()
-  async getGroups(@getUser() user: User): Promise<Group[]> {
-    return await this.groupsService.getGroups(user);
+  async getUserGroups(@getUser() user: User): Promise<Group[]> {
+    return await this.groupsService.getUserGroups(user);
   }
 
   @Post('add-user/:groupId/:userId')

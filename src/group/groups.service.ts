@@ -36,6 +36,7 @@ export class GroupsService {
       const notFoundUsernames = usernames.filter(
         (username) => !foundUsernames.includes(username),
       );
+
       throw new NotFoundException(
         `Users not found for the following usernames: ${notFoundUsernames.join(', ')}`,
       );
@@ -57,7 +58,7 @@ export class GroupsService {
   ): Promise<TransformedGroupDto> {
     const group = await this.groupsRepository.getGroupById(groupId);
 
-    if (group.owner.id !== user.id) {
+    if (!this.isOwner(user.id, group.owner.id)) {
       throw new ForbiddenException(
         'You are not authorized to update this group',
       );
@@ -94,7 +95,7 @@ export class GroupsService {
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
     if (
-      user.id !== existingGroup.owner.id &&
+      !this.isOwner(user.id, existingGroup.owner.id) &&
       !existingGroup.members.some((member) => member.id === user.id)
     ) {
       throw new ForbiddenException(
@@ -122,7 +123,7 @@ export class GroupsService {
 
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
-    if (user.id !== existingGroup.owner.id) {
+    if (!this.isOwner(user.id, existingGroup.owner.id)) {
       throw new ForbiddenException(
         'User is not allowed to add members to this group.',
       );
@@ -147,7 +148,7 @@ export class GroupsService {
   async deleteGroup(user: User, groupId: string): Promise<void> {
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
-    if (user.id !== existingGroup.owner.id) {
+    if (!this.isOwner(user.id, existingGroup.owner.id)) {
       throw new ForbiddenException('Only the owner can delete the group.');
     }
 
@@ -161,5 +162,9 @@ export class GroupsService {
     }
 
     await this.groupsRepository.deleteGroupById(existingGroup);
+  }
+
+  isOwner(userId: string, ownerId: string): boolean {
+    return userId === ownerId;
   }
 }

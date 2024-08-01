@@ -12,6 +12,8 @@ import { User } from 'src/auth/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
 import { UsersRepository } from 'src/auth/users.repository';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
+import { transformGroupToDto } from 'src/utils/transform-to-dto.util';
+import { TransformedGroupDto } from './dtos/transformed-group.dto';
 
 @Injectable()
 export class GroupsService {
@@ -24,7 +26,7 @@ export class GroupsService {
   async createGroup(
     createGroupDto: CreateGroupDto,
     owner: User,
-  ): Promise<Group> {
+  ): Promise<TransformedGroupDto> {
     const { usernames } = createGroupDto;
 
     const members = await this.usersRepository.getUsersByUsernames(usernames);
@@ -39,14 +41,20 @@ export class GroupsService {
       );
     }
 
-    return this.groupsRepository.createGroup(createGroupDto, owner, members);
+    const group = await this.groupsRepository.createGroup(
+      createGroupDto,
+      owner,
+      members,
+    );
+
+    return transformGroupToDto(group);
   }
 
   async updateGroup(
     groupId: string,
     updateGroupDto: UpdateGroupDto,
     user: User,
-  ): Promise<Group> {
+  ): Promise<TransformedGroupDto> {
     const group = await this.groupsRepository.getGroupById(groupId);
 
     if (group.owner.id !== user.id) {
@@ -55,7 +63,12 @@ export class GroupsService {
       );
     }
 
-    return await this.groupsRepository.updateGroup(group, updateGroupDto);
+    const updatedGroup = await this.groupsRepository.updateGroup(
+      group,
+      updateGroupDto,
+    );
+
+    return transformGroupToDto(updatedGroup);
   }
 
   async getGroups(user: User): Promise<Group[]> {
@@ -72,7 +85,7 @@ export class GroupsService {
     user: User,
     groupId: string,
     userId: string,
-  ): Promise<Group> {
+  ): Promise<TransformedGroupDto> {
     const userToAdd = await this.usersRepository.getUserByUniqueKey(
       UserUniqueKey.ID,
       userId,
@@ -89,14 +102,19 @@ export class GroupsService {
       );
     }
 
-    return await this.groupsRepository.addUserToGroup(existingGroup, userToAdd);
+    const updatedGroup = await this.groupsRepository.addUserToGroup(
+      existingGroup,
+      userToAdd,
+    );
+
+    return transformGroupToDto(updatedGroup);
   }
 
   async removeUserFromGroup(
     user: User,
     groupId: string,
     userId: string,
-  ): Promise<Group> {
+  ): Promise<TransformedGroupDto> {
     const userToRemove = await this.usersRepository.getUserByUniqueKey(
       UserUniqueKey.ID,
       userId,
@@ -118,10 +136,12 @@ export class GroupsService {
       );
     }
 
-    return await this.groupsRepository.removeUserFromGroup(
+    const updatedGroup = await this.groupsRepository.removeUserFromGroup(
       existingGroup,
       userToRemove,
     );
+
+    return transformGroupToDto(updatedGroup);
   }
 
   async deleteGroup(user: User, groupId: string): Promise<void> {

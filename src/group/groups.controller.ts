@@ -16,7 +16,6 @@ import { Group } from './group.schema';
 import { GroupsService } from './groups.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
-import { transformGroupToDto } from 'src/utils/transform-to-dto.util';
 
 @Controller('group')
 @UseGuards(JwtGuard)
@@ -28,8 +27,7 @@ export class GroupsController {
     @getUser() user: User,
     @Body() createGroupDto: CreateGroupDto,
   ): Promise<TransformedGroupDto> {
-    const group = await this.groupsService.createGroup(createGroupDto, user);
-    return transformGroupToDto(group);
+    return await this.groupsService.createGroup(createGroupDto, user);
   }
 
   @Patch(':id')
@@ -38,12 +36,7 @@ export class GroupsController {
     @getUser() user: User,
     @Body() updateGroupDto: UpdateGroupDto,
   ): Promise<TransformedGroupDto> {
-    const group = await this.groupsService.updateGroup(
-      id,
-      updateGroupDto,
-      user,
-    );
-    return transformGroupToDto(group);
+    return await this.groupsService.updateGroup(id, updateGroupDto, user);
   }
 
   @Get()
@@ -57,12 +50,7 @@ export class GroupsController {
     @Param('groupId') groupId: string,
     @Param('userId') userId: string,
   ): Promise<TransformedGroupDto> {
-    const group = await this.groupsService.addUserToGroup(
-      user,
-      groupId,
-      userId,
-    );
-    return transformGroupToDto(group);
+    return await this.groupsService.addUserToGroup(user, groupId, userId);
   }
 
   @Patch('remove-user/:groupId/:userId')
@@ -71,12 +59,7 @@ export class GroupsController {
     @Param('groupId') groupId: string,
     @Param('userId') userId: string,
   ): Promise<TransformedGroupDto> {
-    const group = await this.groupsService.removeUserFromGroup(
-      user,
-      groupId,
-      userId,
-    );
-    return transformGroupToDto(group);
+    return await this.groupsService.removeUserFromGroup(user, groupId, userId);
   }
 
   @Delete('delete/:groupId')

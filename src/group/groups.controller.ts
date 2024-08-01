@@ -3,6 +3,7 @@ import { CreateGroupDto } from './dtos/create-group.dto';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -76,5 +77,14 @@ export class GroupsController {
       userId,
     );
     return transformGroupToDto(group);
+  }
+
+  @Delete('delete/:groupId')
+  async deleteGroup(
+    @getUser() user: User,
+    @Param('groupId') groupId: string,
+  ): Promise<{ message: string }> {
+    await this.groupsService.deleteGroup(user, groupId);
+    return { message: `Group '${groupId} deleted successfully` };
   }
 }

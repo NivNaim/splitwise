@@ -56,7 +56,7 @@ export class GroupsRepository extends Repository<Group> {
     try {
       group = await this.findOne({
         where: { id },
-        relations: ['owner', 'members'],
+        relations: ['owner', 'members', 'expenses'],
       });
     } catch (error) {
       throw new InternalServerErrorException();
@@ -111,6 +111,30 @@ export class GroupsRepository extends Repository<Group> {
       return await this.save(group);
     } catch (error) {
       throw new InternalServerErrorException();
+    }
+  }
+
+  async deleteGroupById(group: Group): Promise<void> {
+    const { id } = group;
+
+    const queryRunner = this.manager.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      group.members = [];
+      await queryRunner.manager.save(group);
+
+      await queryRunner.manager.delete(Group, id);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      console.log(error);
+      throw new InternalServerErrorException();
+    } finally {
+      await queryRunner.release();
     }
   }
 }

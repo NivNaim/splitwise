@@ -1,5 +1,6 @@
 import { CreateGroupDto } from './dtos/create-group.dto';
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -121,5 +122,24 @@ export class GroupsService {
       existingGroup,
       userToRemove,
     );
+  }
+
+  async deleteGroup(user: User, groupId: string): Promise<void> {
+    const existingGroup = await this.groupsRepository.getGroupById(groupId);
+
+    if (user.id !== existingGroup.owner.id) {
+      throw new ForbiddenException('Only the owner can delete the group.');
+    }
+
+    const unsettledExpenses = existingGroup.expenses.filter(
+      (expense) => !expense.isPaid,
+    );
+    if (unsettledExpenses.length > 0) {
+      throw new BadRequestException(
+        `All expenses and debts must be settled before deleting the group`,
+      );
+    }
+
+    await this.groupsRepository.deleteGroupById(existingGroup);
   }
 }

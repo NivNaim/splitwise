@@ -32,6 +32,9 @@ export class Group {
   @Exclude({ toPlainOnly: true })
   owner: User;
 
-  @OneToMany(() => Expense, (expense) => expense.group, { eager: true })
+  @OneToMany(() => Expense, (expense) => expense.group, {
+    eager: true,
+    cascade: ['insert', 'update', 'remove'],
+  })
   expenses: Expense[];
 }

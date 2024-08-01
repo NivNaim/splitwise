@@ -21,7 +21,7 @@ export class ExpensesRepository extends Repository<Expense> {
       ...createExpenseDto,
       paidBy: paidByUser,
       paidOn: paidOnUser,
-      group: group,
+      group,
       createdAt: new Date().toISOString(),
     });
 

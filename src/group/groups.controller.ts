@@ -62,12 +62,12 @@ export class GroupsController {
     return await this.groupsService.removeUserFromGroup(user, groupId, userId);
   }
 
-  @Delete('delete/:groupId')
+  @Delete(':id')
   async deleteGroup(
     @getUser() user: User,
-    @Param('groupId') groupId: string,
+    @Param('id') id: string,
   ): Promise<{ message: string }> {
-    await this.groupsService.deleteGroup(user, groupId);
-    return { message: `Group '${groupId} deleted successfully` };
+    await this.groupsService.deleteGroup(user, id);
+    return { message: `Group '${id} deleted successfully` };
   }
 }

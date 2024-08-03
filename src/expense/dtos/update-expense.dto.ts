@@ -15,7 +15,7 @@ export class UpdateExpenseDto {
 
   @IsString()
   @IsOptional()
-  paidOnId?: string;
+  receivedById?: string;
 
   @IsBoolean()
   @IsOptional()

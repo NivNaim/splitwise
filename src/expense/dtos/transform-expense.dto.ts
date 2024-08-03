@@ -21,7 +21,7 @@ export class TransformedExpenseDto {
   paidById: string;
 
   @IsUUID()
-  paidOnId: string;
+  receivedById: string;
 
   @IsOptional()
   @IsBoolean()

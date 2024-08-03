@@ -19,13 +19,13 @@ export class ExpensesRepository extends Repository<Expense> {
   async createExpense(
     group: Group,
     paidByUser: User,
-    paidOnUser: User,
+    receivedByUser: User,
     createExpenseDto: CreateExpenseDto,
   ): Promise<Expense> {
     const expense = this.create({
       ...createExpenseDto,
       paidBy: paidByUser,
-      paidOn: paidOnUser,
+      receivedBy: receivedByUser,
       group,
       createdAt: new Date().toISOString(),
     });
@@ -42,7 +42,7 @@ export class ExpensesRepository extends Repository<Expense> {
     try {
       expense = await this.findOne({
         where: { id },
-        relations: ['paidBy', 'paidOn', 'group'],
+        relations: ['paidBy', 'receivedBy', 'group'],
       });
     } catch (error) {
       throw new InternalServerErrorException();

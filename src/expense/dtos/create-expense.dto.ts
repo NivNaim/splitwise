@@ -17,7 +17,7 @@ export class CreateExpenseDto {
   paidById: string;
 
   @IsUUID()
-  paidOnId: string;
+  receivedById: string;
 
   @IsOptional()
   @IsBoolean()

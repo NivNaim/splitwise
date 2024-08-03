@@ -29,9 +29,9 @@ export class ExpensesService {
     user: User,
     createExpenseDto: CreateExpenseDto,
   ): Promise<TransformedExpenseDto> {
-    const { groupId, paidById, paidOnId } = createExpenseDto;
+    const { groupId, paidById, receivedById } = createExpenseDto;
 
-    if (!isUserInvolvedInExpense(user.id, paidById, paidOnId)) {
+    if (!isUserInvolvedInExpense(user.id, paidById, receivedById)) {
       throw new UnauthorizedException(
         'You can only create expenses for yourself.',
       );
@@ -41,10 +41,10 @@ export class ExpensesService {
 
     if (
       !isMemberInGroup(group.members, paidById) ||
-      !isMemberInGroup(group.members, paidOnId)
+      !isMemberInGroup(group.members, receivedById)
     ) {
       throw new BadRequestException(
-        'Both paidBy and paidOn users must be members of the group.',
+        'Both paidBy and receivedBy users must be members of the group.',
       );
     }
 
@@ -53,15 +53,15 @@ export class ExpensesService {
       paidById,
     );
 
-    const paidOnUser = await this.usersRepository.getUserByUniqueKey(
+    const receivedByUser = await this.usersRepository.getUserByUniqueKey(
       UserUniqueKey.ID,
-      paidOnId,
+      receivedById,
     );
 
     const expense = await this.expensesRepository.createExpense(
       group,
       paidByUser,
-      paidOnUser,
+      receivedByUser,
       createExpenseDto,
     );
 
@@ -76,7 +76,11 @@ export class ExpensesService {
     const expense = await this.expensesRepository.getExpenseById(expenseId);
 
     if (
-      !isUserInvolvedInExpense(user.id, expense.paidBy.id, expense.paidOn.id)
+      !isUserInvolvedInExpense(
+        user.id,
+        expense.paidBy.id,
+        expense.receivedBy.id,
+      )
     ) {
       throw new UnauthorizedException(
         'You can only update expenses for yourself.',

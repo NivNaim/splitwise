@@ -23,7 +23,7 @@ export const transformExpenseToDto = (
     group: expense.group,
     isPaid: expense.isPaid,
     paidById: expense.paidBy.id,
-    paidOnId: expense.paidOn.id,
+    receivedById: expense.receivedBy.id,
     createdAt: expense.createdAt,
   };
 };

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { transformExpenseToDto } from 'src/utils/transform-to-dto.util';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
 import { isMemberInGroup } from 'src/utils/is-member-in-group.util';
 import { isUserInvolvedInExpense } from 'src/utils/is-user-involved-in-expense.util';
+import { isOwner } from 'src/utils/is-owner.util';
 
 @Injectable()
 export class ExpensesService {
@@ -93,5 +95,20 @@ export class ExpensesService {
     );
 
     return transformExpenseToDto(updatedExpense);
+  }
+
+  async deleteExpense(user: User, expenseId: string): Promise<void> {
+    const expense = await this.expensesRepository.getExpenseById(expenseId);
+
+    const groupId = expense.group.id;
+    const group = await this.groupsRepository.getGroupById(groupId);
+
+    if (!isOwner(user.id, group.owner.id)) {
+      throw new ForbiddenException(
+        'Only the owner can delete expense from the group.',
+      );
+    }
+
+    await this.expensesRepository.deleteExpenseById(expenseId);
   }
 }

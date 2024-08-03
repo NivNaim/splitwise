@@ -67,4 +67,12 @@ export class ExpensesRepository extends Repository<Expense> {
       throw new InternalServerErrorException();
     }
   }
+
+  async deleteExpenseById(id: string): Promise<void> {
+    try {
+      await this.delete(id);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
 }

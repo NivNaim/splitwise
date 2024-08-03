@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Param,
   Patch,
   Post,
@@ -34,5 +35,14 @@ export class ExpensesController {
     @Body() updateExpenseDto: UpdateExpenseDto,
   ): Promise<TransformedExpenseDto> {
     return await this.expensesService.updateExpense(user, id, updateExpenseDto);
+  }
+
+  @Delete(':id')
+  async deleteExpense(
+    @getUser() user: User,
+    @Param('id') id: string,
+  ): Promise<{ message: string }> {
+    await this.expensesService.deleteExpense(user, id);
+    return { message: `Expense '${id} deleted successfully` };
   }
 }

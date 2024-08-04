@@ -70,4 +70,15 @@ export class GroupsController {
     await this.groupsService.deleteGroup(user, id);
     return { message: `Group '${id} deleted successfully` };
   }
+
+  @Get('min-transactions/:id')
+  async getMinTransactions(
+    @getUser() user: User,
+    @Param('id') id: string,
+  ): Promise<{ message: string }> {
+    const minTransfers = await this.groupsService.getMinTransfers(user, id);
+    return {
+      message: `Minimum transactions needed to settle debts: ${minTransfers}`,
+    };
+  }
 }

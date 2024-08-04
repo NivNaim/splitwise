@@ -56,7 +56,13 @@ export class GroupsRepository extends Repository<Group> {
     try {
       group = await this.findOne({
         where: { id },
-        relations: ['owner', 'members', 'expenses'],
+        relations: [
+          'owner',
+          'members',
+          'expenses',
+          'expenses.paidBy',
+          'expenses.receivedBy',
+        ],
       });
     } catch (error) {
       throw new InternalServerErrorException();

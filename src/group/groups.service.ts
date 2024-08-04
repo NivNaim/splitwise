@@ -1,3 +1,4 @@
+import { transformExpenseToDto } from './../utils/transform-to-dto.util';
 import { CreateGroupDto } from './dtos/create-group.dto';
 import {
   BadRequestException,
@@ -15,6 +16,8 @@ import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { transformGroupToDto } from 'src/utils/transform-to-dto.util';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
 import { isOwner } from 'src/utils/is-owner.util';
+import { minTransfers } from 'src/utils/min-transfers.util';
+import { calculateBalances } from 'src/utils/calculate-balances.util';
 
 @Injectable()
 export class GroupsService {
@@ -153,15 +156,26 @@ export class GroupsService {
       throw new ForbiddenException('Only the owner can delete the group.');
     }
 
-    const unsettledExpenses = existingGroup.expenses.filter(
-      (expense) => !expense.isPaid,
+    const balances = existingGroup.expenses.map((expense) =>
+      Number(expense.value),
     );
-    if (unsettledExpenses.length > 0) {
+
+    if (calculateBalances(balances) !== 0) {
       throw new BadRequestException(
-        `All expenses and debts must be settled before deleting the group`,
+        'All expenses and debts must be settled before deleting the group',
       );
     }
 
     await this.groupsRepository.deleteGroupById(existingGroup);
+  }
+
+  async getMinTransfers(user: User, groupId: string): Promise<number> {
+    const existingGroup = await this.groupsRepository.getGroupById(groupId);
+
+    if (!isOwner(user.id, existingGroup.owner.id)) {
+      throw new ForbiddenException('Only the owner can delete the group.');
+    }
+
+    return minTransfers(existingGroup.expenses);
   }
 }

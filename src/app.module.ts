@@ -20,7 +20,7 @@ import { User } from './auth/user.schema';
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: configService.get('DB_SYNCHRONIZE'),
         entities: [User, Group, Expense],
         host: configService.get('DB_HOST'),
         port: configService.get('DB_PORT'),

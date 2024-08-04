@@ -71,6 +71,7 @@ DB_PORT="your db port"
 DB_USERNAME="your db username"
 DB_PASSWORD="your db password"
 DB_DATABASE="your db name"
+DB_SYNCHRONIZE="your db synchronize"
 ```
 
 ## Running the app

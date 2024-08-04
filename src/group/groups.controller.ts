@@ -40,8 +40,8 @@ export class GroupsController {
   }
 
   @Get()
-  async getGroups(@getUser() user: User): Promise<Group[]> {
-    return await this.groupsService.getGroups(user);
+  async getUserGroups(@getUser() user: User): Promise<Group[]> {
+    return await this.groupsService.getUserGroups(user);
   }
 
   @Post('add-user/:groupId/:userId')
@@ -62,12 +62,23 @@ export class GroupsController {
     return await this.groupsService.removeUserFromGroup(user, groupId, userId);
   }
 
-  @Delete('delete/:groupId')
+  @Delete(':id')
   async deleteGroup(
     @getUser() user: User,
-    @Param('groupId') groupId: string,
+    @Param('id') id: string,
   ): Promise<{ message: string }> {
-    await this.groupsService.deleteGroup(user, groupId);
-    return { message: `Group '${groupId} deleted successfully` };
+    await this.groupsService.deleteGroup(user, id);
+    return { message: `Group '${id} deleted successfully` };
+  }
+
+  @Get('min-transactions/:id')
+  async getMinTransactions(
+    @getUser() user: User,
+    @Param('id') id: string,
+  ): Promise<{ message: string }> {
+    const minTransfers = await this.groupsService.getMinTransfers(user, id);
+    return {
+      message: `Minimum transactions needed to settle debts: ${minTransfers}`,
+    };
   }
 }

@@ -21,15 +21,15 @@ export class TransformedExpenseDto {
   paidById: string;
 
   @IsUUID()
-  paidOnId: string;
+  receivedById: string;
 
   @IsOptional()
   @IsBoolean()
-  isPaid: boolean;
+  isPaid?: boolean;
 
   @IsNotEmpty()
   group: Group;
 
   @IsOptional()
-  createdAt: string;
+  createdAt?: string;
 }

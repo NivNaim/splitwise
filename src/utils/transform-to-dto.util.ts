@@ -16,6 +16,7 @@ export const transformGroupToDto = (group: Group): TransformedGroupDto => {
 export const transformExpenseToDto = (
   expense: Expense,
 ): TransformedExpenseDto => {
+  console.log('object');
   return {
     id: expense.id,
     cause: expense.cause,
@@ -23,7 +24,7 @@ export const transformExpenseToDto = (
     group: expense.group,
     isPaid: expense.isPaid,
     paidById: expense.paidBy.id,
-    paidOnId: expense.paidOn.id,
+    receivedById: expense.receivedBy.id,
     createdAt: expense.createdAt,
   };
 };

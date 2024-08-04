@@ -14,6 +14,9 @@ import { UsersRepository } from 'src/auth/users.repository';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { transformGroupToDto } from 'src/utils/transform-to-dto.util';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
+import { isOwner } from 'src/utils/is-owner.util';
+import { minTransfers } from 'src/utils/min-transfers.util';
+import { calculateBalances } from 'src/utils/calculate-balances.util';
 
 @Injectable()
 export class GroupsService {
@@ -36,6 +39,7 @@ export class GroupsService {
       const notFoundUsernames = usernames.filter(
         (username) => !foundUsernames.includes(username),
       );
+
       throw new NotFoundException(
         `Users not found for the following usernames: ${notFoundUsernames.join(', ')}`,
       );
@@ -57,7 +61,7 @@ export class GroupsService {
   ): Promise<TransformedGroupDto> {
     const group = await this.groupsRepository.getGroupById(groupId);
 
-    if (group.owner.id !== user.id) {
+    if (!isOwner(user.id, group.owner.id)) {
       throw new ForbiddenException(
         'You are not authorized to update this group',
       );
@@ -71,8 +75,8 @@ export class GroupsService {
     return transformGroupToDto(updatedGroup);
   }
 
-  async getGroups(user: User): Promise<Group[]> {
-    const groups = await this.groupsRepository.getGroups(user);
+  async getUserGroups(user: User): Promise<Group[]> {
+    const groups = await this.groupsRepository.getUserGroups(user);
 
     if (!groups || groups.length === 0) {
       throw new NotFoundException();
@@ -94,7 +98,7 @@ export class GroupsService {
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
     if (
-      user.id !== existingGroup.owner.id &&
+      !isOwner(user.id, existingGroup.owner.id) &&
       !existingGroup.members.some((member) => member.id === user.id)
     ) {
       throw new ForbiddenException(
@@ -122,7 +126,7 @@ export class GroupsService {
 
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
-    if (user.id !== existingGroup.owner.id) {
+    if (!isOwner(user.id, existingGroup.owner.id)) {
       throw new ForbiddenException(
         'User is not allowed to add members to this group.',
       );
@@ -147,19 +151,30 @@ export class GroupsService {
   async deleteGroup(user: User, groupId: string): Promise<void> {
     const existingGroup = await this.groupsRepository.getGroupById(groupId);
 
-    if (user.id !== existingGroup.owner.id) {
+    if (!isOwner(user.id, existingGroup.owner.id)) {
       throw new ForbiddenException('Only the owner can delete the group.');
     }
 
-    const unsettledExpenses = existingGroup.expenses.filter(
-      (expense) => !expense.isPaid,
+    const balances = existingGroup.expenses.map((expense) =>
+      Number(expense.value),
     );
-    if (unsettledExpenses.length > 0) {
+
+    if (calculateBalances(balances) !== 0) {
       throw new BadRequestException(
-        `All expenses and debts must be settled before deleting the group`,
+        'All expenses and debts must be settled before deleting the group',
       );
     }
 
     await this.groupsRepository.deleteGroupById(existingGroup);
+  }
+
+  async getMinTransfers(user: User, groupId: string): Promise<number> {
+    const existingGroup = await this.groupsRepository.getGroupById(groupId);
+
+    if (!isOwner(user.id, existingGroup.owner.id)) {
+      throw new ForbiddenException('Only the owner can delete the group.');
+    }
+
+    return minTransfers(existingGroup.expenses);
   }
 }

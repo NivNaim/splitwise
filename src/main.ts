@@ -16,8 +16,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
   app.use(cookieParser());
 
-  await app.listen(PORT || 3000);
-  logger.log(`Application listening on port ${PORT || 3000}`);
+  await app.listen(PORT ?? 3000);
+  logger.log(`Application listening on port ${PORT ?? 3000}`);
 
   if (module.hot) {
     module.hot.accept();

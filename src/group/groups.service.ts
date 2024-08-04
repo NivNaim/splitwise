@@ -1,4 +1,3 @@
-import { transformExpenseToDto } from './../utils/transform-to-dto.util';
 import { CreateGroupDto } from './dtos/create-group.dto';
 import {
   BadRequestException,

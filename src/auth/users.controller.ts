@@ -1,31 +1,33 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { UsersService } from './users.service';
 import {
   SignInCredentialsDto,
   SignUpCredentialsDto,
 } from './dtos/auth-credentials.dto';
 import { Response } from 'express';
 
-@Controller('auth')
+@Controller('user')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly usersService: UsersService) {}
 
-  @Post('signup')
+  @Post('register')
   async signUp(
     @Body() signUpCredentialsDto: SignUpCredentialsDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<{ message: string }> {
-    const { accessToken } = await this.authService.signUp(signUpCredentialsDto);
+    const { accessToken } =
+      await this.usersService.signUp(signUpCredentialsDto);
     response.cookie('user_token', accessToken);
     return { message: 'Registration successful' };
   }
 
-  @Post('signin')
+  @Post('login')
   async signIn(
     @Body() signInCredentialsDto: SignInCredentialsDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<{ message: string }> {
-    const { accessToken } = await this.authService.signIn(signInCredentialsDto);
+    const { accessToken } =
+      await this.usersService.signIn(signInCredentialsDto);
     response.cookie('user_token', accessToken);
     return { message: 'Login successful' };
   }

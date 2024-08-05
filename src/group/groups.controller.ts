@@ -10,7 +10,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { getUser } from 'src/auth/decorators/get-user.decorator';
+import { getUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.schema';
 import { Group } from './group.schema';
 import { GroupsService } from './groups.service';
@@ -32,8 +32,8 @@ export class GroupsController {
 
   @Patch(':id')
   async updateGroup(
-    @Param('id') id: string,
     @getUser() user: User,
+    @Param('id') id: string,
     @Body() updateGroupDto: UpdateGroupDto,
   ): Promise<TransformedGroupDto> {
     return await this.groupsService.updateGroup(id, updateGroupDto, user);
@@ -44,7 +44,7 @@ export class GroupsController {
     return await this.groupsService.getUserGroups(user);
   }
 
-  @Post('add-user/:groupId/:userId')
+  @Post('add/:groupId/:userId')
   async addUserToGroup(
     @getUser() user: User,
     @Param('groupId') groupId: string,
@@ -53,7 +53,7 @@ export class GroupsController {
     return await this.groupsService.addUserToGroup(user, groupId, userId);
   }
 
-  @Patch('remove-user/:groupId/:userId')
+  @Patch('remove/:groupId/:userId')
   async removeUserFromGroup(
     @getUser() user: User,
     @Param('groupId') groupId: string,
@@ -62,7 +62,7 @@ export class GroupsController {
     return await this.groupsService.removeUserFromGroup(user, groupId, userId);
   }
 
-  @Delete(':id')
+  @Delete('remove/:id')
   async deleteGroup(
     @getUser() user: User,
     @Param('id') id: string,

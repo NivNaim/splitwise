@@ -11,7 +11,7 @@ import { JwtPayload } from './jwt-payload.interface';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 
 @Injectable()
-export class AuthService {
+export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepository: UsersRepository,

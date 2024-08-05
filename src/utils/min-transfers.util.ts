@@ -4,12 +4,12 @@ export const minTransfers = (expenses: Expense[]): number => {
   const balanceMap: { [key: string]: number } = {};
 
   for (const expense of expenses) {
-    const { paidBy, receivedBy, value } = expense;
+    const { paidBy, paidOn, value } = expense;
     if (!balanceMap[paidBy.id]) balanceMap[paidBy.id] = 0;
-    if (!balanceMap[receivedBy.id]) balanceMap[receivedBy.id] = 0;
+    if (!balanceMap[paidOn.id]) balanceMap[paidOn.id] = 0;
 
     balanceMap[paidBy.id] -= Number(value);
-    balanceMap[receivedBy.id] += Number(value);
+    balanceMap[paidOn.id] += Number(value);
   }
 
   const balances = Object.values(balanceMap).filter((balance) => balance !== 0);

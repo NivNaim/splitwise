@@ -4,6 +4,7 @@ import {
   SignInCredentialsDto,
   SignUpCredentialsDto,
 } from './dtos/auth-credentials.dto';
+import { ForgetPasswordDto } from './dtos/forgot-password.dto';
 import { Response } from 'express';
 
 @Controller('user')
@@ -30,5 +31,13 @@ export class AuthController {
       await this.usersService.signIn(signInCredentialsDto);
     response.cookie('user_token', accessToken);
     return { message: 'Login successful' };
+  }
+
+  @Post('forget')
+  async forgetPassword(
+    @Body() forgetPasswordDto: ForgetPasswordDto,
+  ): Promise<{ message: string }> {
+    await this.usersService.forgetPassword(forgetPasswordDto);
+    return { message: 'Password reset email sent' };
   }
 }

@@ -20,7 +20,7 @@ export class Expense {
 
   @ManyToOne(() => User, (user) => user.incomes)
   @Exclude({ toPlainOnly: true })
-  receivedBy: User;
+  paidOn: User;
 
   @Column({ default: false })
   isPaid: boolean;

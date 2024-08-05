@@ -35,6 +35,6 @@ export class User {
   @OneToMany(() => Expense, (expense) => expense.paidBy)
   expenses: Expense[];
 
-  @OneToMany(() => Expense, (expense) => expense.receivedBy)
+  @OneToMany(() => Expense, (expense) => expense.paidOn)
   incomes: Expense[];
 }

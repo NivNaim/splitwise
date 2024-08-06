@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from './users.service';
 import {
   SignInCredentialsDto,
   SignUpCredentialsDto,
@@ -7,11 +7,11 @@ import {
 import { Response } from 'express';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
 
-@Controller('auth')
+@Controller('user')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
+  @Post('register')
   async signUp(
     @Body() signUpCredentialsDto: SignUpCredentialsDto,
     @Res({ passthrough: true }) response: Response,

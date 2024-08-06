@@ -33,7 +33,6 @@ export class Group {
   owner: User;
 
   @OneToMany(() => Expense, (expense) => expense.group, {
-    // eager: true,
     cascade: ['insert', 'update', 'remove'],
   })
   expenses: Expense[];

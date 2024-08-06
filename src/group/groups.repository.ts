@@ -61,7 +61,7 @@ export class GroupsRepository extends Repository<Group> {
           'members',
           'expenses',
           'expenses.paidBy',
-          'expenses.receivedBy',
+          'expenses.paidOn',
         ],
       });
     } catch (error) {

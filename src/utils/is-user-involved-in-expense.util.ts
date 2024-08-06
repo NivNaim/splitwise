@@ -1,7 +1,7 @@
 export const isUserInvolvedInExpense = (
   userId: string,
   paidById: string,
-  receivedById: string,
+  paidOnId: string,
 ): boolean => {
-  return userId === paidById || userId === receivedById;
+  return userId === paidById || userId === paidOnId;
 };

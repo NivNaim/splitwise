@@ -72,7 +72,10 @@ export class AuthController {
   }
 
   @Patch('reset-password')
-  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return await this.authService.resetPassword(resetPasswordDto);
+  async resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<{ message: string }> {
+    await this.authService.resetPassword(resetPasswordDto);
+    return { message: 'The password has been reset' };
   }
 }

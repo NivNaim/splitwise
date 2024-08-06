@@ -119,7 +119,7 @@ export class AuthService {
     await this.usersRepository.updateUserPassword(user, newPassword);
   }
 
-  async forgotPassword(forgetPasswordDto: ForgetPasswordDto) {
+  async forgotPassword(forgetPasswordDto: ForgetPasswordDto): Promise<void> {
     const user = await this.usersRepository.GetUserByUniqueKey(
       UserUniqueKey.EMAIL,
       forgetPasswordDto.email,
@@ -139,7 +139,7 @@ export class AuthService {
     }
   }
 
-  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
     const { resetToken, newPassword } = resetPasswordDto;
     const resetTokenSchema =
       await this.resetTokenRepository.getResetTokenSchemaByToken(resetToken);
@@ -152,5 +152,7 @@ export class AuthService {
       resetTokenSchema.user,
       newPassword,
     );
+
+    await this.resetTokenRepository.deleteResetTokenById(resetTokenSchema.id);
   }
 }

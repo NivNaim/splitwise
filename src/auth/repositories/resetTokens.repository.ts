@@ -7,7 +7,7 @@ import { ResetToken } from '../schemas/reset-token.schema';
 @Injectable()
 export class ResetTokenRepository extends Repository<ResetToken> {
   constructor(dataSource: DataSource) {
-    super(RefreshToken, dataSource.createEntityManager());
+    super(ResetToken, dataSource.createEntityManager());
   }
 
   async createResetTokenSchema(
@@ -30,16 +30,16 @@ export class ResetTokenRepository extends Repository<ResetToken> {
 
   async getResetTokenSchemaByToken(token: string): Promise<ResetToken> {
     try {
-      const refreshTokenSchema = await this.findOne({
+      const resetTokenSchema = await this.findOne({
         where: { token },
       });
-      return refreshTokenSchema;
+      return resetTokenSchema;
     } catch (error) {
       throw new InternalServerErrorException();
     }
   }
 
-  async deleteRefreshTokenById(id: string): Promise<void> {
+  async deleteResetTokenById(id: string): Promise<void> {
     try {
       await this.delete({ id });
     } catch (error) {

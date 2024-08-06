@@ -9,7 +9,10 @@ export class ResetToken {
   @Column()
   token: string;
 
-  @ManyToOne(() => User, (user) => user.refreshTokens, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.refreshTokens, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   user: User;
 
   @Column({ type: 'timestamptz' })

@@ -8,6 +8,7 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
+import { RefreshToken } from './refresh-token.schema';
 
 @Entity()
 export class User {
@@ -37,4 +38,7 @@ export class User {
 
   @OneToMany(() => Expense, (expense) => expense.receivedBy)
   incomes: Expense[];
+
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshTokens: RefreshToken[];
 }

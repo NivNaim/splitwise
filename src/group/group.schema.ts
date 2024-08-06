@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { User } from 'src/auth/user.schema';
+import { User } from 'src/auth/schemas/user.schema';
 import { Expense } from 'src/expense/expense.schema';
 import {
   Column,
@@ -28,7 +28,7 @@ export class Group {
   @Exclude({ toPlainOnly: true })
   members: User[];
 
-  @ManyToOne(() => User, (user) => user.ownedGroups)
+  @ManyToOne(() => User, (user) => user.ownedGroups, { onDelete: 'CASCADE' })
   @Exclude({ toPlainOnly: true })
   owner: User;
 

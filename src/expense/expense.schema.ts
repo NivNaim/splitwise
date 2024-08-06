@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { User } from 'src/auth/user.schema';
+import { User } from 'src/auth/schemas/user.schema';
 import { Group } from 'src/group/group.schema';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -14,18 +14,18 @@ export class Expense {
   @Column('decimal')
   value: number;
 
-  @ManyToOne(() => User, (user) => user.expenses)
+  @ManyToOne(() => User, (user) => user.expenses, { onDelete: 'CASCADE' })
   @Exclude({ toPlainOnly: true })
   paidBy: User;
 
-  @ManyToOne(() => User, (user) => user.incomes)
+  @ManyToOne(() => User, (user) => user.incomes, { onDelete: 'CASCADE' })
   @Exclude({ toPlainOnly: true })
   receivedBy: User;
 
   @Column({ default: false })
   isPaid: boolean;
 
-  @ManyToOne(() => Group, (group) => group.expenses)
+  @ManyToOne(() => Group, (group) => group.expenses, { onDelete: 'CASCADE' })
   group: Group;
 
   @Column({ default: new Date().getUTCDate().toString() })

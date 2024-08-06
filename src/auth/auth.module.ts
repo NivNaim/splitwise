@@ -8,14 +8,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { RefreshTokenRepository } from './repositories/refreshTokens.repository';
-import { ResetToken } from './schemas/reset-token.schema';
+import { ResetTokenRepository } from './repositories/resetTokens.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UsersRepository,
       RefreshTokenRepository,
-      ResetToken,
+      ResetTokenRepository,
     ]),
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -34,6 +34,7 @@ import { ResetToken } from './schemas/reset-token.schema';
     JwtStrategy,
     UsersRepository,
     RefreshTokenRepository,
+    ResetTokenRepository,
   ],
   exports: [PassportModule, JwtModule, JwtStrategy, UsersRepository],
 })

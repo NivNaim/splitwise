@@ -2,36 +2,36 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { RefreshToken } from '../schemas/refresh-token.schema';
 import { User } from '../schemas/user.schema';
+import { ResetToken } from '../schemas/reset-token.schema';
 
 @Injectable()
-export class RefreshTokenRepository extends Repository<RefreshToken> {
+export class ResetTokenRepository extends Repository<ResetToken> {
   constructor(dataSource: DataSource) {
     super(RefreshToken, dataSource.createEntityManager());
   }
 
-  async createRefreshTokenSchema(
+  async createResetTokenSchema(
     token: string,
     user: User,
     expires: Date,
   ): Promise<RefreshToken> {
-    const refreshToken = this.create({
+    const resetTokenSchema = this.create({
       token,
       user,
       expires,
     });
 
     try {
-      return await this.save(refreshToken);
+      return await this.save(resetTokenSchema);
     } catch (error) {
       throw new InternalServerErrorException();
     }
   }
 
-  async getRefreshTokenSchemaByToken(token: string): Promise<RefreshToken> {
+  async getResetTokenSchemaByToken(token: string): Promise<ResetToken> {
     try {
       const refreshTokenSchema = await this.findOne({
         where: { token },
-        relations: ['user'],
       });
       return refreshTokenSchema;
     } catch (error) {

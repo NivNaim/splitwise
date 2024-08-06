@@ -1,10 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from './repositories/users.repository';
-import {
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import {
@@ -20,8 +16,8 @@ import { ChangePasswordDto } from './dtos/change-password.dto';
 import { User } from './schemas/user.schema';
 import { ForgetPasswordDto } from './dtos/forgot-password.dto';
 import { nanoid } from 'nanoid';
-import { Repository } from 'typeorm';
-import { ResetToken } from './schemas/reset-token.schema';
+import { ResetTokenRepository } from './repositories/resetTokens.repository';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,8 +26,8 @@ export class AuthService {
     private readonly usersRepository: UsersRepository,
     @InjectRepository(RefreshTokenRepository)
     private readonly refreshTokenRepository: RefreshTokenRepository,
-    @InjectRepository(ResetToken)
-    private readonly resetTokenRepository: Repository<ResetToken>,
+    @InjectRepository(ResetTokenRepository)
+    private readonly resetTokenRepository: ResetTokenRepository,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -78,7 +74,7 @@ export class AuthService {
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + 60 * 60 * 24 * 7);
 
-    await this.refreshTokenRepository.createRefreshToken(
+    await this.refreshTokenRepository.createRefreshTokenSchema(
       refreshToken,
       user,
       expires,
@@ -134,18 +130,27 @@ export class AuthService {
       expires.setHours(expires.getHours() + 1);
 
       const resetToken = nanoid(64);
-      const resetTokenSchema = this.resetTokenRepository.create({
-        token: resetToken,
+      await this.resetTokenRepository.createResetTokenSchema(
+        resetToken,
         user,
         expires,
-      });
-
-      try {
-        await this.resetTokenRepository.save(resetTokenSchema);
-      } catch (error) {
-        throw new InternalServerErrorException();
-      }
+      );
       //TODO: Send the link to the user by email (using nodemailer/ SES /etc...)
     }
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { resetToken, newPassword } = resetPasswordDto;
+    const resetTokenSchema =
+      await this.resetTokenRepository.getResetTokenSchemaByToken(resetToken);
+
+    if (!resetTokenSchema) {
+      throw new UnauthorizedException('Invalid link');
+    }
+
+    await this.usersRepository.updateUserPassword(
+      resetTokenSchema.user,
+      newPassword,
+    );
   }
 }

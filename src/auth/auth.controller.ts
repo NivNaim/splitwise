@@ -11,6 +11,7 @@ import { JwtGuard } from './jwt.guard';
 import { GetUser } from './get-user.decorator';
 import { User } from './schemas/user.schema';
 import { ForgetPasswordDto } from './dtos/forgot-password.dto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -68,5 +69,10 @@ export class AuthController {
   ): Promise<{ message: string }> {
     await this.authService.forgotPassword(forgetPasswordDto);
     return { message: 'If the user exists, they will recieve an email' };
+  }
+
+  @Patch('reset-password')
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return await this.authService.resetPassword(resetPasswordDto);
   }
 }

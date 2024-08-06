@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { DataSource, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { SignUpCredentialsDto } from './dtos/auth-credentials.dto';
-import { User } from './schemas/user.schema';
+import { SignUpCredentialsDto } from '../dtos/auth-credentials.dto';
+import { User } from '../schemas/user.schema';
 import {
   isUserUniqueKey,
   UserUniqueKey,
@@ -86,5 +86,17 @@ export class UsersRepository extends Repository<User> {
     }
 
     return users;
+  }
+
+  async updateUserPassword(user: User, newPassword: string): Promise<void> {
+    const salt = await bcrypt.genSalt();
+    const newHashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = newHashedPassword;
+
+    try {
+      await this.save(user);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }

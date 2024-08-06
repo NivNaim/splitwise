@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { RefreshToken } from './schemas/refresh-token.schema';
-import { User } from './schemas/user.schema';
+import { RefreshToken } from '../schemas/refresh-token.schema';
+import { User } from '../schemas/user.schema';
 
 @Injectable()
 export class RefreshTokenRepository extends Repository<RefreshToken> {

@@ -10,7 +10,7 @@ import { GroupsRepository } from './groups.repository';
 import { Group } from './group.schema';
 import { User } from 'src/auth/schemas/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
-import { UsersRepository } from 'src/auth/users.repository';
+import { UsersRepository } from 'src/auth/repositories/users.repository';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { transformGroupToDto } from 'src/utils/transform-to-dto.util';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';

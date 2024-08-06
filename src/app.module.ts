@@ -9,6 +9,7 @@ import { Group } from './group/group.schema';
 import { Expense } from './expense/expense.schema';
 import { User } from './auth/schemas/user.schema';
 import { RefreshToken } from './auth/schemas/refresh-token.schema';
+import { ResetToken } from './auth/schemas/reset-token.schema';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { RefreshToken } from './auth/schemas/refresh-token.schema';
         type: 'postgres',
         autoLoadEntities: true,
         synchronize: configService.get('DB_SYNCHRONIZE'),
-        entities: [User, RefreshToken, Group, Expense],
+        entities: [User, RefreshToken, ResetToken, Group, Expense],
         host: configService.get('DB_HOST'),
         port: configService.get('DB_PORT'),
         username: configService.get('DB_USERNAME'),

@@ -1,6 +1,10 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersRepository } from './users.repository';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UsersRepository } from './repositories/users.repository';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import {
@@ -10,8 +14,14 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
-import { RefreshTokenRepository } from './refreshTokens.repository';
+import { RefreshTokenRepository } from './repositories/refreshTokens.repository';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
+import { ChangePasswordDto } from './dtos/change-password.dto';
+import { User } from './schemas/user.schema';
+import { ForgetPasswordDto } from './dtos/forgot-password.dto';
+import { nanoid } from 'nanoid';
+import { Repository } from 'typeorm';
+import { ResetToken } from './schemas/reset-token.schema';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +30,8 @@ export class AuthService {
     private readonly usersRepository: UsersRepository,
     @InjectRepository(RefreshTokenRepository)
     private readonly refreshTokenRepository: RefreshTokenRepository,
+    @InjectRepository(ResetToken)
+    private readonly resetTokenRepository: Repository<ResetToken>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -48,7 +60,7 @@ export class AuthService {
       });
       return tokens;
     } else {
-      throw new UnauthorizedException('Please check your login credentials');
+      throw new UnauthorizedException('Please check your credentials');
     }
   }
 
@@ -96,5 +108,44 @@ export class AuthService {
     );
 
     return newTokens;
+  }
+
+  async changePassword(
+    user: User,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<void> {
+    const { oldPassword, newPassword } = changePasswordDto;
+
+    if (!(await bcrypt.compare(oldPassword, user.password))) {
+      throw new UnauthorizedException('Please check your credentials');
+    }
+
+    await this.usersRepository.updateUserPassword(user, newPassword);
+  }
+
+  async forgotPassword(forgetPasswordDto: ForgetPasswordDto) {
+    const user = await this.usersRepository.GetUserByUniqueKey(
+      UserUniqueKey.EMAIL,
+      forgetPasswordDto.email,
+    );
+
+    if (user) {
+      const expires = new Date();
+      expires.setHours(expires.getHours() + 1);
+
+      const resetToken = nanoid(64);
+      const resetTokenSchema = this.resetTokenRepository.create({
+        token: resetToken,
+        user,
+        expires,
+      });
+
+      try {
+        await this.resetTokenRepository.save(resetTokenSchema);
+      } catch (error) {
+        throw new InternalServerErrorException();
+      }
+      //TODO: Send the link to the user by email (using nodemailer/ SES /etc...)
+    }
   }
 }

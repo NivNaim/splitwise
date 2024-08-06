@@ -8,7 +8,7 @@ import { ExpensesRepository } from './expenses.repository';
 import { User } from 'src/auth/schemas/user.schema';
 import { CreateExpenseDto } from './dtos/create-expense.dto';
 import { GroupsRepository } from 'src/group/groups.repository';
-import { UsersRepository } from 'src/auth/users.repository';
+import { UsersRepository } from 'src/auth/repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';

@@ -10,7 +10,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { getUser } from 'src/auth/get-user.decorator';
+import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/schemas/user.schema';
 import { Group } from './group.schema';
 import { GroupsService } from './groups.service';
@@ -24,7 +24,7 @@ export class GroupsController {
 
   @Post()
   async createGroup(
-    @getUser() user: User,
+    @GetUser() user: User,
     @Body() createGroupDto: CreateGroupDto,
   ): Promise<TransformedGroupDto> {
     return await this.groupsService.createGroup(createGroupDto, user);
@@ -32,7 +32,7 @@ export class GroupsController {
 
   @Patch(':id')
   async updateGroup(
-    @getUser() user: User,
+    @GetUser() user: User,
     @Param('id') id: string,
     @Body() updateGroupDto: UpdateGroupDto,
   ): Promise<TransformedGroupDto> {
@@ -40,13 +40,13 @@ export class GroupsController {
   }
 
   @Get()
-  async getUserGroups(@getUser() user: User): Promise<Group[]> {
-    return await this.groupsService.getUserGroups(user);
+  async GetUserGroups(@GetUser() user: User): Promise<Group[]> {
+    return await this.groupsService.GetUserGroups(user);
   }
 
   @Post('add/:groupId/:userId')
   async addUserToGroup(
-    @getUser() user: User,
+    @GetUser() user: User,
     @Param('groupId') groupId: string,
     @Param('userId') userId: string,
   ): Promise<TransformedGroupDto> {
@@ -55,7 +55,7 @@ export class GroupsController {
 
   @Patch('remove/:groupId/:userId')
   async removeUserFromGroup(
-    @getUser() user: User,
+    @GetUser() user: User,
     @Param('groupId') groupId: string,
     @Param('userId') userId: string,
   ): Promise<TransformedGroupDto> {
@@ -64,7 +64,7 @@ export class GroupsController {
 
   @Delete('remove/:id')
   async deleteGroup(
-    @getUser() user: User,
+    @GetUser() user: User,
     @Param('id') id: string,
   ): Promise<{ message: string }> {
     await this.groupsService.deleteGroup(user, id);
@@ -73,7 +73,7 @@ export class GroupsController {
 
   @Get('min-transactions/:id')
   async getMinTransactions(
-    @getUser() user: User,
+    @GetUser() user: User,
     @Param('id') id: string,
   ): Promise<{ message: string }> {
     const minTransfers = await this.groupsService.getMinTransfers(user, id);

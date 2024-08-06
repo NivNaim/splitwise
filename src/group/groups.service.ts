@@ -32,7 +32,7 @@ export class GroupsService {
   ): Promise<TransformedGroupDto> {
     const { usernames } = createGroupDto;
 
-    const members = await this.usersRepository.getUsersByUsernames(usernames);
+    const members = await this.usersRepository.GetUsersByUsernames(usernames);
 
     if (members.length !== usernames.length) {
       const foundUsernames = members.map((member) => member.username);
@@ -75,8 +75,8 @@ export class GroupsService {
     return transformGroupToDto(updatedGroup);
   }
 
-  async getUserGroups(user: User): Promise<Group[]> {
-    const groups = await this.groupsRepository.getUserGroups(user);
+  async GetUserGroups(user: User): Promise<Group[]> {
+    const groups = await this.groupsRepository.GetUserGroups(user);
 
     if (!groups || groups.length === 0) {
       throw new NotFoundException();
@@ -90,7 +90,7 @@ export class GroupsService {
     groupId: string,
     userId: string,
   ): Promise<TransformedGroupDto> {
-    const userToAdd = await this.usersRepository.getUserByUniqueKey(
+    const userToAdd = await this.usersRepository.GetUserByUniqueKey(
       UserUniqueKey.ID,
       userId,
     );
@@ -119,7 +119,7 @@ export class GroupsService {
     groupId: string,
     userId: string,
   ): Promise<TransformedGroupDto> {
-    const userToRemove = await this.usersRepository.getUserByUniqueKey(
+    const userToRemove = await this.usersRepository.GetUserByUniqueKey(
       UserUniqueKey.ID,
       userId,
     );

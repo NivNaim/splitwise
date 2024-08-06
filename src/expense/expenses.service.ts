@@ -50,12 +50,12 @@ export class ExpensesService {
       );
     }
 
-    const paidByUser = await this.usersRepository.getUserByUniqueKey(
+    const paidByUser = await this.usersRepository.GetUserByUniqueKey(
       UserUniqueKey.ID,
       paidById,
     );
 
-    const paidOnUser = await this.usersRepository.getUserByUniqueKey(
+    const paidOnUser = await this.usersRepository.GetUserByUniqueKey(
       UserUniqueKey.ID,
       paidOnId,
     );

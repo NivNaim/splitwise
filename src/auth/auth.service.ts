@@ -38,7 +38,7 @@ export class AuthService {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const { username, password } = signInCredentialsDto;
 
-    const user = await this.usersRepository.getUserByUniqueKey(
+    const user = await this.usersRepository.GetUserByUniqueKey(
       UserUniqueKey.USERNAME,
       username,
     );
@@ -58,7 +58,7 @@ export class AuthService {
     const accessToken = await this.jwtService.signAsync(jwtPayload);
     const refreshToken = uuid();
 
-    const user = await this.usersRepository.getUserByUniqueKey(
+    const user = await this.usersRepository.GetUserByUniqueKey(
       UserUniqueKey.USERNAME,
       jwtPayload.username,
     );

@@ -43,7 +43,7 @@ export class UsersRepository extends Repository<User> {
     }
   }
 
-  async getUserByUniqueKey(
+  async GetUserByUniqueKey(
     uniqueKey: UserUniqueKey,
     value: string,
   ): Promise<User> {
@@ -68,7 +68,7 @@ export class UsersRepository extends Repository<User> {
     return user;
   }
 
-  async getUsersByUsernames(usernames: string[]): Promise<User[]> {
+  async GetUsersByUsernames(usernames: string[]): Promise<User[]> {
     if (!usernames || usernames.length === 0) {
       throw new NotFoundException(`No usernames provided`);
     }

@@ -10,8 +10,8 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { getUser } from 'src/auth/decorators/get-user.decorator';
-import { User } from 'src/auth/user.schema';
+import { getUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/schemas/user.schema';
 import { Group } from './group.schema';
 import { GroupsService } from './groups.service';
 import { JwtGuard } from 'src/auth/jwt.guard';

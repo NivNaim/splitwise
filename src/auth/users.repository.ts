@@ -8,7 +8,7 @@ import {
 import { DataSource, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { SignUpCredentialsDto } from './dtos/auth-credentials.dto';
-import { User } from './user.schema';
+import { User } from './schemas/user.schema';
 import {
   isUserUniqueKey,
   UserUniqueKey,

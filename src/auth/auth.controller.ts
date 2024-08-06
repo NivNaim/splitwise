@@ -5,6 +5,7 @@ import {
   SignUpCredentialsDto,
 } from './dtos/auth-credentials.dto';
 import { Response } from 'express';
+import { RefreshTokenDto } from './dtos/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,8 +16,10 @@ export class AuthController {
     @Body() signUpCredentialsDto: SignUpCredentialsDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<{ message: string }> {
-    const { accessToken } = await this.authService.signUp(signUpCredentialsDto);
-    response.cookie('user_token', accessToken);
+    const { accessToken, refreshToken } =
+      await this.authService.signUp(signUpCredentialsDto);
+    response.cookie('access_token', accessToken);
+    response.cookie('refresh_token', refreshToken);
     return { message: 'Registration successful' };
   }
 
@@ -25,8 +28,22 @@ export class AuthController {
     @Body() signInCredentialsDto: SignInCredentialsDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<{ message: string }> {
-    const { accessToken } = await this.authService.signIn(signInCredentialsDto);
-    response.cookie('user_token', accessToken);
+    const { accessToken, refreshToken } =
+      await this.authService.signIn(signInCredentialsDto);
+    response.cookie('access_token', accessToken);
+    response.cookie('refresh_token', refreshToken);
     return { message: 'Login successful' };
+  }
+
+  @Post('refresh')
+  async refresh(
+    @Body() refreshTokenDto: RefreshTokenDto,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<{ message: string }> {
+    const { accessToken, refreshToken } =
+      await this.authService.refreshTokens(refreshTokenDto);
+    response.cookie('access_token', accessToken);
+    response.cookie('refresh_token', refreshToken);
+    return { message: 'Tokens refreshed successfully' };
   }
 }

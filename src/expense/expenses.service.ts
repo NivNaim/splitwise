@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ExpensesRepository } from './expenses.repository';
-import { User } from 'src/auth/user.schema';
+import { User } from 'src/auth/schemas/user.schema';
 import { CreateExpenseDto } from './dtos/create-expense.dto';
 import { GroupsRepository } from 'src/group/groups.repository';
 import { UsersRepository } from 'src/auth/users.repository';

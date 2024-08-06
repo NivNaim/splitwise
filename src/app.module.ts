@@ -7,7 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { Group } from './group/group.schema';
 import { Expense } from './expense/expense.schema';
-import { User } from './auth/user.schema';
+import { User } from './auth/schemas/user.schema';
+import { RefreshToken } from './auth/schemas/refresh-token.schema';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { User } from './auth/user.schema';
         type: 'postgres',
         autoLoadEntities: true,
         synchronize: configService.get('DB_SYNCHRONIZE'),
-        entities: [User, Group, Expense],
+        entities: [User, RefreshToken, Group, Expense],
         host: configService.get('DB_HOST'),
         port: configService.get('DB_PORT'),
         username: configService.get('DB_USERNAME'),

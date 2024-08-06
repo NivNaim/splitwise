@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UsersRepository } from './users.repository';
 import { JwtPayload } from './jwt-payload.interface';
-import { User } from './user.schema';
+import { User } from './schemas/user.schema';
 import { Request } from 'express';
 
 @Injectable()
@@ -27,10 +27,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   private static extractJwt(req: Request): string | null {
     if (
       req.cookies &&
-      'user_token' in req.cookies &&
-      req.cookies.user_token > 0
+      'access_token' in req.cookies &&
+      req.cookies.access_token > 0
     ) {
-      return req.cookies.user_token;
+      return req.cookies.access_token;
     }
 
     return null;

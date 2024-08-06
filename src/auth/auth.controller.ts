@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
-import { AuthService } from './users.service';
+import { AuthService } from './auth.service';
 import {
   SignInCredentialsDto,
   SignUpCredentialsDto,
@@ -7,7 +7,7 @@ import {
 import { Response } from 'express';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
 
-@Controller('user')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

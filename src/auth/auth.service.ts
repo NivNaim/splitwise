@@ -135,6 +135,7 @@ export class AuthService {
         user,
         expires,
       );
+
       //TODO: Send the link to the user by email (using nodemailer/ SES /etc...)
     }
   }

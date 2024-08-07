@@ -13,7 +13,7 @@ import { User } from './schemas/user.schema';
 import { ForgetPasswordDto } from './dtos/forgot-password.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 
-@Controller('auth')
+@Controller('user')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -29,7 +29,7 @@ export class AuthController {
     return { message: 'Registration successful' };
   }
 
-  @Post('signin')
+  @Post('login')
   async signIn(
     @Body() signInCredentialsDto: SignInCredentialsDto,
     @Res({ passthrough: true }) response: Response,

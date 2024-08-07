@@ -6,13 +6,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { DataSource, In, Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { SignUpCredentialsDto } from '../dtos/auth-credentials.dto';
 import { User } from '../schemas/user.schema';
 import {
   isUserUniqueKey,
   UserUniqueKey,
 } from 'src/enums/user-unique-keys.enum';
+import { hashPassword } from 'src/utils/hash-password.util';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -23,8 +23,7 @@ export class UsersRepository extends Repository<User> {
   async createUser(signupCredentialsDto: SignUpCredentialsDto): Promise<User> {
     const { username, email, password } = signupCredentialsDto;
 
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await hashPassword(password);
 
     const user: User = this.create({
       username,
@@ -89,9 +88,8 @@ export class UsersRepository extends Repository<User> {
   }
 
   async updateUserPassword(user: User, newPassword: string): Promise<void> {
-    const salt = await bcrypt.genSalt();
-    const newHashedPassword = await bcrypt.hash(newPassword, salt);
-    user.password = newHashedPassword;
+    const hashedPassword = await hashPassword(newPassword);
+    user.password = hashedPassword;
 
     try {
       await this.save(user);

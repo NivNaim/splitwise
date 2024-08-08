@@ -13,12 +13,7 @@ import { UpdateGroupDto } from './dtos/update-group.dto';
 import { UsersRepository } from 'src/auth/repositories/users.repository';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
-import {
-  calculateBalances,
-  isOwner,
-  minTransfers,
-  transformGroupToDto,
-} from 'src/utils';
+import { isOwner, minTransfers, transformGroupToDto } from 'src/utils';
 
 @Injectable()
 export class GroupsService {
@@ -161,7 +156,12 @@ export class GroupsService {
       Number(expense.value),
     );
 
-    if (calculateBalances(balances) !== 0) {
+    const numberOfBalances = balances.reduce(
+      (acc, balance) => acc + balance,
+      0,
+    );
+
+    if (numberOfBalances !== 0) {
       throw new BadRequestException(
         'All expenses and debts must be settled before deleting the group',
       );

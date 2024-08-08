@@ -5,10 +5,6 @@ import { Expense } from 'src/expense/expense.schema';
 import { TransformedGroupDto } from 'src/group/dtos/transformed-group.dto';
 import { Group } from 'src/group/group.schema';
 
-export const calculateBalances = (balances: number[]): number => {
-  return balances.reduce((acc, balance) => acc + balance, 0);
-};
-
 export const hashPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt();
   return await bcrypt.hash(password, salt);

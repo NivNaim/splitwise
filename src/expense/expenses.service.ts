@@ -12,11 +12,13 @@ import { UsersRepository } from 'src/auth/repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';
-import { transformExpenseToDto } from 'src/utils/transform-to-dto.util';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
-import { isMemberInGroup } from 'src/utils/is-member-in-group.util';
-import { isUserInvolvedInExpense } from 'src/utils/is-user-involved-in-expense.util';
-import { isOwner } from 'src/utils/is-owner.util';
+import {
+  isMemberInGroup,
+  isOwner,
+  isUserInvolvedInExpense,
+  transformExpenseToDto,
+} from 'src/utils';
 
 @Injectable()
 export class ExpensesService {

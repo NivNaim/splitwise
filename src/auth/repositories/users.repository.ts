@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { DataSource, In, Repository } from 'typeorm';
-import { hashPassword } from 'src/utils/hash-password.util';
+import { hashPassword } from 'src/utils';
 import { SignUpCredentialsDto } from '../dtos/auth-credentials.dto';
 import { User } from '../schemas/user.schema';
 import {

@@ -63,7 +63,7 @@ export class AuthController {
     return { message: 'Password changed successfully' };
   }
 
-  @Post('forgot-password')
+  @Post('forget')
   async forgotPassword(
     @Body() forgetPasswordDto: ForgetPasswordDto,
   ): Promise<{ message: string }> {

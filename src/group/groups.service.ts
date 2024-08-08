@@ -12,11 +12,13 @@ import { User } from 'src/auth/schemas/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
 import { UsersRepository } from 'src/auth/repositories/users.repository';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
-import { transformGroupToDto } from 'src/utils/transform-to-dto.util';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
-import { isOwner } from 'src/utils/is-owner.util';
-import { minTransfers } from 'src/utils/min-transfers.util';
-import { calculateBalances } from 'src/utils/calculate-balances.util';
+import {
+  calculateBalances,
+  isOwner,
+  minTransfers,
+  transformGroupToDto,
+} from 'src/utils';
 
 @Injectable()
 export class GroupsService {

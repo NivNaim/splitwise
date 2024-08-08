@@ -78,7 +78,6 @@ export const transformGroupToDto = (group: Group): TransformedGroupDto => {
 export const transformExpenseToDto = (
   expense: Expense,
 ): TransformedExpenseDto => {
-  console.log('object');
   return {
     id: expense.id,
     cause: expense.cause,

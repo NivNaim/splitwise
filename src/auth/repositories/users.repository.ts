@@ -12,7 +12,7 @@ import {
   isUserUniqueKey,
   UserUniqueKey,
 } from 'src/enums/user-unique-keys.enum';
-import { hashPassword } from 'src/utils/hash-password.util';
+import { hashPassword } from 'src/utils';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {

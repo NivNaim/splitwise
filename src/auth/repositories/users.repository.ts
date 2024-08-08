@@ -6,13 +6,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { DataSource, In, Repository } from 'typeorm';
-import { hashPassword } from 'src/utils';
 import { SignUpCredentialsDto } from '../dtos/auth-credentials.dto';
 import { User } from '../schemas/user.schema';
 import {
   isUserUniqueKey,
   UserUniqueKey,
 } from 'src/enums/user-unique-keys.enum';
+import { hashPassword } from 'src/utils';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {

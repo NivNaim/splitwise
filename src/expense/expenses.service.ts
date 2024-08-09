@@ -13,12 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
-import {
-  isMemberInGroup,
-  isOwner,
-  isUserInvolvedInExpense,
-  transformExpenseToDto,
-} from 'src/utils';
+import { transformExpenseToDto } from 'src/utils';
 
 @Injectable()
 export class ExpensesService {
@@ -35,7 +30,7 @@ export class ExpensesService {
   ): Promise<TransformedExpenseDto> {
     const { groupId, paidById, paidOnId } = createExpenseDto;
 
-    if (!isUserInvolvedInExpense(user.id, paidById, paidOnId)) {
+    if (!(user.id === paidById || user.id === paidOnId)) {
       throw new UnauthorizedException(
         'You can only create expenses for yourself.',
       );
@@ -44,8 +39,8 @@ export class ExpensesService {
     const group = await this.groupsRepository.getGroupById(groupId);
 
     if (
-      !isMemberInGroup(group.members, paidById) ||
-      !isMemberInGroup(group.members, paidOnId)
+      !group.members.some((member) => member.id === paidById) ||
+      !group.members.some((member) => member.id === paidOnId)
     ) {
       throw new BadRequestException(
         'Both paidBy and paidOn users must be members of the group.',
@@ -79,9 +74,7 @@ export class ExpensesService {
   ): Promise<TransformedExpenseDto> {
     const expense = await this.expensesRepository.getExpenseById(expenseId);
 
-    if (
-      !isUserInvolvedInExpense(user.id, expense.paidBy.id, expense.paidOn.id)
-    ) {
+    if (!(user.id === expense.paidBy.id || user.id === expense.paidOn.id)) {
       throw new UnauthorizedException(
         'You can only update expenses for yourself.',
       );
@@ -101,7 +94,7 @@ export class ExpensesService {
     const groupId = expense.group.id;
     const group = await this.groupsRepository.getGroupById(groupId);
 
-    if (!isOwner(user.id, group.owner.id)) {
+    if (user.id !== group.owner.id) {
       throw new ForbiddenException(
         'Only the owner can delete expense from the group.',
       );

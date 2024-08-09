@@ -1,5 +1,4 @@
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/auth/schemas/user.schema';
 import { TransformedExpenseDto } from 'src/expense/dtos/transform-expense.dto';
 import { Expense } from 'src/expense/expense.schema';
 import { TransformedGroupDto } from 'src/group/dtos/transformed-group.dto';
@@ -8,22 +7,6 @@ import { Group } from 'src/group/group.schema';
 export const hashPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt();
   return await bcrypt.hash(password, salt);
-};
-
-export const isMemberInGroup = (members: User[], userId: string): boolean => {
-  return members.some((member) => member.id === userId);
-};
-
-export const isOwner = (userId: string, ownerId: string): boolean => {
-  return userId === ownerId;
-};
-
-export const isUserInvolvedInExpense = (
-  userId: string,
-  paidById: string,
-  paidOnId: string,
-): boolean => {
-  return userId === paidById || userId === paidOnId;
 };
 
 export const minTransfers = (expenses: Expense[]): number => {

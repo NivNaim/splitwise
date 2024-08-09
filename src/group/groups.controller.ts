@@ -16,6 +16,7 @@ import { Group } from './group.schema';
 import { GroupsService } from './groups.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
+import { ResponseMessage } from 'src/types/response-message.interface';
 
 @Controller('group')
 @UseGuards(JwtGuard)
@@ -66,7 +67,7 @@ export class GroupsController {
   async deleteGroup(
     @GetUser() user: User,
     @Param('id') id: string,
-  ): Promise<{ message: string }> {
+  ): Promise<ResponseMessage> {
     await this.groupsService.deleteGroup(user, id);
     return { message: `Group '${id} deleted successfully` };
   }
@@ -75,7 +76,7 @@ export class GroupsController {
   async getMinTransactions(
     @GetUser() user: User,
     @Param('id') id: string,
-  ): Promise<{ message: string }> {
+  ): Promise<ResponseMessage> {
     const minTransfers = await this.groupsService.getMinTransfers(user, id);
     return {
       message: `Minimum transactions needed to settle debts: ${minTransfers}`,

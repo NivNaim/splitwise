@@ -14,6 +14,7 @@ import { ExpensesService } from './expenses.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
+import { ResponseMessage } from 'src/types/response-message.interface';
 
 @Controller('expense')
 @UseGuards(JwtGuard)
@@ -41,7 +42,7 @@ export class ExpensesController {
   async deleteExpense(
     @GetUser() user: User,
     @Param('id') id: string,
-  ): Promise<{ message: string }> {
+  ): Promise<ResponseMessage> {
     await this.expensesService.deleteExpense(user, id);
     return { message: `Expense '${id} deleted successfully` };
   }

@@ -14,7 +14,7 @@ import { ForgetPasswordDto } from './dtos/forgot-password.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { ResponseMessage } from 'src/types/response-message.interface';
 
-@Controller('user')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -30,7 +30,7 @@ export class AuthController {
     return { message: 'Registration successful' };
   }
 
-  @Post('login')
+  @Post('signin')
   async signIn(
     @Body() signInCredentialsDto: SignInCredentialsDto,
     @Res({ passthrough: true }) response: Response,
@@ -64,7 +64,7 @@ export class AuthController {
     return { message: 'Password changed successfully' };
   }
 
-  @Post('forget')
+  @Post('forgot-password')
   async forgotPassword(
     @Body() forgetPasswordDto: ForgetPasswordDto,
   ): Promise<ResponseMessage> {

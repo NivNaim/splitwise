@@ -18,6 +18,7 @@ import { ForgetPasswordDto } from './dtos/forgot-password.dto';
 import { nanoid } from 'nanoid';
 import { ResetTokenRepository } from './repositories/resetTokens.repository';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { Tokens } from 'src/types/tokens.interface';
 
 @Injectable()
 export class AuthService {
@@ -31,9 +32,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(
-    signUpCredentialsDto: SignUpCredentialsDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<Tokens> {
     const user = await this.usersRepository.createUser(signUpCredentialsDto);
     const tokens = await this.generateUserTokens({
       username: user.username,
@@ -41,9 +40,7 @@ export class AuthService {
     return tokens;
   }
 
-  async signIn(
-    signInCredentialsDto: SignInCredentialsDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async signIn(signInCredentialsDto: SignInCredentialsDto): Promise<Tokens> {
     const { username, password } = signInCredentialsDto;
 
     const user = await this.usersRepository.GetUserByUniqueKey(
@@ -60,9 +57,7 @@ export class AuthService {
     }
   }
 
-  async generateUserTokens(
-    jwtPayload: JwtPayload,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async generateUserTokens(jwtPayload: JwtPayload): Promise<Tokens> {
     const accessToken = await this.jwtService.signAsync(jwtPayload);
     const refreshToken = uuid();
 
@@ -83,9 +78,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async refreshTokens(
-    refreshTokenDto: RefreshTokenDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async refreshTokens(refreshTokenDto: RefreshTokenDto): Promise<Tokens> {
     const refreshTokenSchema =
       await this.refreshTokenRepository.getRefreshTokenSchemaByToken(
         refreshTokenDto.token,

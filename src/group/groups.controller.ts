@@ -45,7 +45,7 @@ export class GroupsController {
     return await this.groupsService.GetUserGroups(user);
   }
 
-  @Post('add/:groupId/:userId')
+  @Post('add-user/:groupId/:userId')
   async addUserToGroup(
     @GetUser() user: User,
     @Param('groupId') groupId: string,
@@ -54,7 +54,7 @@ export class GroupsController {
     return await this.groupsService.addUserToGroup(user, groupId, userId);
   }
 
-  @Patch('remove/:groupId/:userId')
+  @Patch('remove-user/:groupId/:userId')
   async removeUserFromGroup(
     @GetUser() user: User,
     @Param('groupId') groupId: string,
@@ -63,7 +63,7 @@ export class GroupsController {
     return await this.groupsService.removeUserFromGroup(user, groupId, userId);
   }
 
-  @Delete('remove/:id')
+  @Delete(':id')
   async deleteGroup(
     @GetUser() user: User,
     @Param('id') id: string,

@@ -14,7 +14,7 @@ import { ExpensesService } from './expenses.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
-import { ResponseMessage } from 'src/types/response-message.interface';
+import { ResponseMessage } from 'src/types';
 
 @Controller('expense')
 @UseGuards(JwtGuard)

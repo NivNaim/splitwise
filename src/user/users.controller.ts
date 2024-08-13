@@ -4,9 +4,9 @@ import { JwtGuard } from 'src/auth/jwt.guard';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from './schemas/user.schema';
 import { ChangePasswordDto } from './dtos/change-password.dto';
-import { ResponseMessage } from 'src/types/response-message.interface';
 import { ForgetPasswordDto } from './dtos/forgot-password.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { ResponseMessage } from 'src/types';
 
 @Controller('user')
 export class UsersController {

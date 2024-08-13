@@ -6,7 +6,7 @@ import {
 } from './dtos/auth-credentials.dto';
 import { Response } from 'express';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
-import { ResponseMessage } from 'src/types/response-message.interface';
+import { ResponseMessage } from 'src/types';
 
 @Controller('auth')
 export class AuthController {

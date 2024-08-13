@@ -11,8 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
 import { UserUniqueKey } from 'src/enums';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
-import { Tokens } from 'src/types/tokens.interface';
 import { RefreshTokenRepository } from './refreshTokens.repository';
+import { Tokens } from 'src/types';
 
 @Injectable()
 export class AuthService {

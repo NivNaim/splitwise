@@ -16,7 +16,7 @@ import { Group } from './group.schema';
 import { GroupsService } from './groups.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
-import { ResponseMessage } from 'src/types/response-message.interface';
+import { ResponseMessage } from 'src/types';
 
 @Controller('group')
 @UseGuards(JwtGuard)

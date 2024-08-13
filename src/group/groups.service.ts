@@ -11,7 +11,7 @@ import { Group } from './group.schema';
 import { User } from 'src/auth/schemas/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
 import { UsersRepository } from 'src/auth/repositories/users.repository';
-import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
+import { UserUniqueKey } from 'src/enums';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
 import { minTransfers, transformGroupToDto } from 'src/utils';
 

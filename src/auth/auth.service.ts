@@ -9,7 +9,7 @@ import {
 } from './dtos/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
-import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
+import { UserUniqueKey } from 'src/enums';
 import { RefreshTokenRepository } from './repositories/refreshTokens.repository';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
 import { ChangePasswordDto } from './dtos/change-password.dto';

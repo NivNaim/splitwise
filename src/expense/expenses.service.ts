@@ -10,7 +10,7 @@ import { CreateExpenseDto } from './dtos/create-expense.dto';
 import { GroupsRepository } from 'src/group/groups.repository';
 import { UsersRepository } from 'src/auth/repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserUniqueKey } from 'src/enums/user-unique-keys.enum';
+import { UserUniqueKey } from 'src/enums';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
 import { transformExpenseToDto } from 'src/utils';

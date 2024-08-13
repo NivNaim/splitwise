@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+import { UserUniqueKey } from 'src/enums';
 import { TransformedExpenseDto } from 'src/expense/dtos/transform-expense.dto';
 import { Expense } from 'src/expense/expense.schema';
 import { TransformedGroupDto } from 'src/group/dtos/transformed-group.dto';
@@ -67,4 +68,8 @@ export const transformExpenseToDto = (
     paidOnId: expense.paidOn.id,
     createdAt: expense.createdAt,
   };
+};
+
+export const isUserUniqueKey = (key: any): key is UserUniqueKey => {
+  return Object.values(UserUniqueKey).includes(key);
 };

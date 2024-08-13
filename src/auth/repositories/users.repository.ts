@@ -8,11 +8,8 @@ import {
 import { DataSource, In, Repository } from 'typeorm';
 import { SignUpCredentialsDto } from '../dtos/auth-credentials.dto';
 import { User } from '../schemas/user.schema';
-import {
-  isUserUniqueKey,
-  UserUniqueKey,
-} from 'src/enums/user-unique-keys.enum';
-import { hashPassword } from 'src/utils';
+import { PostgresErrorCode, UserUniqueKey } from 'src/enums';
+import { hashPassword, isUserUniqueKey } from 'src/utils';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -34,7 +31,7 @@ export class UsersRepository extends Repository<User> {
     try {
       return await this.save(user);
     } catch (error) {
-      if (error.code === '23505') {
+      if (error.code === PostgresErrorCode.UNIQUE_VIOLATION) {
         throw new ConflictException('Username or email already exists');
       } else {
         throw new InternalServerErrorException();

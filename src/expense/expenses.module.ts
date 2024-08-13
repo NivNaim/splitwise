@@ -5,10 +5,12 @@ import { ExpensesController } from './expenses.controller';
 import { ExpensesService } from './expenses.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { GroupsModule } from 'src/group/groups.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
     AuthModule,
+    UserModule,
     GroupsModule,
     TypeOrmModule.forFeature([ExpensesRepository]),
   ],

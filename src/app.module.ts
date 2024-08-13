@@ -7,9 +7,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { Group } from './group/group.schema';
 import { Expense } from './expense/expense.schema';
-import { User } from './auth/schemas/user.schema';
-import { RefreshToken } from './auth/schemas/refresh-token.schema';
-import { ResetToken } from './auth/schemas/reset-token.schema';
+import { User } from './user/schemas/user.schema';
+import { ResetToken } from './user/schemas/reset-token.schema';
+import { UserModule } from './user/user.module';
+import { RefreshToken } from './auth/refresh-token.schema';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ResetToken } from './auth/schemas/reset-token.schema';
       validationSchema: configValidationSchema,
       isGlobal: true,
     }),
+    UserModule,
   ],
 })
 export class AppModule {}

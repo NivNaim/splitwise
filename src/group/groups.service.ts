@@ -8,12 +8,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupsRepository } from './groups.repository';
 import { Group } from './group.schema';
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
-import { UsersRepository } from 'src/auth/repositories/users.repository';
 import { UserUniqueKey } from 'src/enums';
 import { TransformedGroupDto } from './dtos/transformed-group.dto';
 import { minTransfers, transformGroupToDto } from 'src/utils';
+import { UsersRepository } from 'src/user/repositories/users.repository';
 
 @Injectable()
 export class GroupsService {

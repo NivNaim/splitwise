@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateExpenseDto } from './dtos/create-expense.dto';
 import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { ExpensesService } from './expenses.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';

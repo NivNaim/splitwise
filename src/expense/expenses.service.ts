@@ -5,15 +5,15 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ExpensesRepository } from './expenses.repository';
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { CreateExpenseDto } from './dtos/create-expense.dto';
 import { GroupsRepository } from 'src/group/groups.repository';
-import { UsersRepository } from 'src/auth/repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserUniqueKey } from 'src/enums';
 import { TransformedExpenseDto } from './dtos/transform-expense.dto';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
 import { transformExpenseToDto } from 'src/utils';
+import { UsersRepository } from 'src/user/repositories/users.repository';
 
 @Injectable()
 export class ExpensesService {

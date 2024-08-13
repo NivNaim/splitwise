@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { Group } from './group.schema';
 import { GroupsService } from './groups.service';
 import { JwtGuard } from 'src/auth/jwt.guard';

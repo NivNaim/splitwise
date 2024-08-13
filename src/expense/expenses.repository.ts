@@ -6,7 +6,7 @@ import {
 import { Expense } from './expense.schema';
 import { DataSource, Repository } from 'typeorm';
 import { Group } from 'src/group/group.schema';
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { CreateExpenseDto } from './dtos/create-expense.dto';
 import { UpdateExpenseDto } from './dtos/update-expense.dto';
 

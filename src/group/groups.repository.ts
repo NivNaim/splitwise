@@ -7,7 +7,7 @@ import {
 import { DataSource, Repository } from 'typeorm';
 import { Group } from './group.schema';
 import { CreateGroupDto } from './dtos/create-group.dto';
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { UpdateGroupDto } from './dtos/update-group.dto';
 
 @Injectable()

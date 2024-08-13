@@ -1,3 +1,4 @@
+import { RefreshToken } from 'src/auth/refresh-token.schema';
 import { Expense } from 'src/expense/expense.schema';
 import { Group } from 'src/group/group.schema';
 import {
@@ -8,7 +9,6 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { RefreshToken } from './refresh-token.schema';
 
 @Entity()
 export class User {

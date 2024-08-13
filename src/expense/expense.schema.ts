@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { User } from 'src/auth/schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { Group } from 'src/group/group.schema';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
